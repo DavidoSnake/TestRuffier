@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">TestRuffier</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+
+    <!--custom-->
+    <string name="key_count_value">key_count_value</string>
+    <string name="RATE_COUNT_VALUE">42</string>
+    <bool name="isFragmentOpen">false</bool>
+
+</resources>

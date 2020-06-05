@@ -1,0 +1,4 @@
+rootProject.name='Ruffier'
+include ':mobile'
+include ':wear'
+include ':common'
