@@ -34,12 +34,6 @@ public class BroadcastService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand");
         System.out.println("onstartcommand");
-     /*   if (mTimer ==null) {
-            mTimer = new Timer();
-            long delay =  1000;
-            long period = 1000*20;
-            mTimer.scheduleAtFixedRate(new RandomValueTimerTask(getApplicationContext()), delay, period);
-        }*/
         startIntent();
         return super.onStartCommand(intent, flags, startId);
     }

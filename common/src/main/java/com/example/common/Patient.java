@@ -11,19 +11,10 @@ public class Patient {
     private String firstname;
     private String dateTest;
 
-    // presuming measures are int and indexes real
+    // presuming measures are int
     private int measure_1;
     private int measure_2;
     private int measure_3;
-    private Double index_1;
-    private Double index_2;
-
-    // colors meaning :
-    // - grey : no mesures made yet (by default)
-    // - green : good health
-    // - red : bad health
-    private String hint_index_1;
-    private String hint_index_2;
 
     public Patient() {
     }
@@ -63,22 +54,6 @@ public class Patient {
         return measure_3;
     }
 
-    public Double getIndex_1() {
-        return index_1;
-    }
-
-    public Double getIndex_2() {
-        return index_2;
-    }
-
-    public String getHint_index_1() {
-        return hint_index_1;
-    }
-
-    public String getHint_index_2() {
-        return hint_index_2;
-    }
-
     public String  getDateTest() {
         return dateTest;
     }
@@ -106,22 +81,6 @@ public class Patient {
 
     public void setMeasure_3(int measure_3) {
         this.measure_3 = measure_3;
-    }
-
-    public void setIndex_1(Double index_1) {
-        this.index_1 = index_1;
-    }
-
-    public void setIndex_2(Double index_2) {
-        this.index_2 = index_2;
-    }
-
-    public void setHint_index_1(String hint_index_1) {
-        this.hint_index_1 = hint_index_1;
-    }
-
-    public void setHint_index_2(String hint_index_2) {
-        this.hint_index_2 = hint_index_2;
     }
 
     public void setDateTest(String  dateTest) {

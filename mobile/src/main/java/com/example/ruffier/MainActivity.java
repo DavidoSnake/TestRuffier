@@ -1,13 +1,7 @@
 package com.example.ruffier;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,42 +12,26 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.common.Constants;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.common.Patient;
 import com.example.common.SQLiteDBHandler;
 import com.example.testruffier.R;
-import com.google.android.gms.wearable.DataClient;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.Wearable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.example.common.Constants.HEART_MEASURE_1;
-import static com.example.common.Constants.HEART_MEASURE_2;
-import static com.example.common.Constants.HEART_MEASURE_3;
-import static com.example.common.Constants.HEART_RATE_COUNT_PATH;
-import static com.example.common.Constants.HEART_RATE_MEASURE_1_PATH;
-import static com.example.common.Constants.HEART_RATE_MEASURE_2_PATH;
-import static com.example.common.Constants.HEART_RATE_MEASURE_3_PATH;
-import static com.example.common.Constants.HEART_RATE_VALUE;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "mobile";
-    TextView tv_stc;
-    LinearLayout lCont;
+
     Button searchB;
     EditText fname;
     EditText lname;
@@ -70,8 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        tv_stc = findViewById(R.id.tv_stc);
 
         Toolbar tb = findViewById(R.id.main_toolbar);
         setSupportActionBar(tb);

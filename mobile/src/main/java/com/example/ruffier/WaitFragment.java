@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.common.Constants;
-import com.example.common.Patient;
 import com.example.common.SQLiteDBHandler;
 import com.example.testruffier.R;
 import com.google.android.gms.wearable.DataClient;
@@ -32,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Timer;
 
 import static com.example.common.Constants.HEART_MEASURE_1;
 import static com.example.common.Constants.HEART_MEASURE_2;
@@ -43,10 +41,10 @@ import static com.example.common.Constants.START_MEASURE_MSG;
 public class WaitFragment extends androidx.fragment.app.Fragment implements DataClient.OnDataChangedListener {
 
     final String TAG = "WaitFragment";
-    static TextView tv;
-    static TextView m1;
-    static TextView m2;
-    static TextView m3;
+    TextView tv;
+    TextView m1;
+    TextView m2;
+    TextView m3;
     DataClient mDataClient;
     BroadcastReceiver br;
     SyncAsyncTasksMobile mSyncAsyncTasksMobile;

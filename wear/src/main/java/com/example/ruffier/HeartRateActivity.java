@@ -6,11 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -29,7 +26,6 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.Objects;
 
-import static android.os.VibrationEffect.DEFAULT_AMPLITUDE;
 import static com.example.common.Constants.MEASURE_DURATION;
 import static com.example.common.Constants.measureNb;
 import static com.example.common.Constants.measuresList1;
@@ -42,10 +38,9 @@ import static com.example.common.Constants.measuresList3;
 public class HeartRateActivity extends WearableActivity {
 
     final String TAG = "HeartRateActivity";
-    static TextView title;
-    static TextView description;
+    TextView title;
+    TextView description;
     BroadcastReceiver broadcastReceiver;
-    SyncAsyncTaskWear mSyncAsyncTaskWear = null;
 
     Intent rateServiceIntent;
     DataClient mDataClient;
@@ -66,7 +61,7 @@ public class HeartRateActivity extends WearableActivity {
             title.setText(txt);
             description.setText("");
             startService(rateServiceIntent);
-            timer2.start();
+            //timer2.start();
         }
     };
 
@@ -81,6 +76,7 @@ public class HeartRateActivity extends WearableActivity {
         @Override
         public void onFinish() {
             stopService(rateServiceIntent);
+            isTimerRunning = false;
             description.setText("");
             title.setText("");
             if (measureNb == 1) {
@@ -93,6 +89,17 @@ public class HeartRateActivity extends WearableActivity {
             } else if (measureNb == 3) {
                 title.setText("Test terminé");
                 description.setText("Résultats envoyés sur le téléphone");
+                new CountDownTimer(10000, 1000) {
+                    @Override
+                    public void onTick(long l) {
+                        Log.d(TAG, "tickBeforeFinish");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        HeartRateActivity.this.finish();
+                    }
+                }.start();
             }
         }
     };
@@ -108,17 +115,17 @@ public class HeartRateActivity extends WearableActivity {
 
         @Override
         public void onFinish() {
-            timer2.start();
+            //timer2.start();
             timer1.start();
             startService(rateServiceIntent);
         }
     };
 
-    private SensorManager mSensorManager;
-    private Sensor mHeartRateSensor;
+
     static Button done;
     int mRate = 0;
     Vibrator vibrator;
+    private boolean isTimerRunning = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,6 +166,10 @@ public class HeartRateActivity extends WearableActivity {
                     default:
                         Log.d(TAG, "unknow message");
                 }
+                if (!isTimerRunning) {
+                    timer2.start();
+                    isTimerRunning = true;
+                }
             }
         };
 
@@ -180,7 +191,7 @@ public class HeartRateActivity extends WearableActivity {
                 public void onClick(View view) {
                     Log.d(TAG, "onClick");
                     done.setVisibility(View.GONE);
-                    title.setText("Début du test dans :");
+                    title.setText("Début de la mesure dans :");
                     timer1.start();
                 }
             });
@@ -195,7 +206,7 @@ public class HeartRateActivity extends WearableActivity {
                         @Override
                         public void onTick(long l) {
                             Log.d(TAG, "beforeFlex");
-                            title.setText("" + l/1000);
+                            title.setText("Début dans " + l/1000);
                         }
 
                         @Override

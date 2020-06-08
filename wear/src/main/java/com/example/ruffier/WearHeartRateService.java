@@ -7,24 +7,21 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 
 import static com.example.common.Constants.HEART_MEASURE_1;
 import static com.example.common.Constants.HEART_MEASURE_2;
 import static com.example.common.Constants.HEART_MEASURE_3;
+import static com.example.common.Constants.MEASURE_1_MSG;
+import static com.example.common.Constants.MEASURE_2_MSG;
+import static com.example.common.Constants.MEASURE_3_MSG;
 import static com.example.common.Constants.measureNb;
 import static com.example.common.Constants.measuresList1;
 import static com.example.common.Constants.measuresList2;
 import static com.example.common.Constants.measuresList3;
-import static com.example.common.Constants.MEASURE_1_MSG;
-import static com.example.common.Constants.MEASURE_2_MSG;
-import static com.example.common.Constants.MEASURE_3_MSG;
-import static com.example.common.Constants.MEASURE_DURATION;
 
 public class WearHeartRateService extends Service implements SensorEventListener {
 

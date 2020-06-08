@@ -1,45 +1,26 @@
 package com.example.ruffier;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.common.Constants;
 import com.example.common.Patient;
 import com.example.common.SQLiteDBHandler;
 import com.example.testruffier.R;
-import com.google.android.gms.wearable.DataClient;
-import com.google.android.gms.wearable.Wearable;
-
-import java.util.Objects;
-
-import static com.example.common.Constants.START_MEASURE;
-import static com.example.common.Constants.START_MEASURE_MSG;
 
 public class ViewPatientActivity extends AppCompatActivity {
 
-    TextView pat_id;
     TextView pat_fname;
     TextView pat_lname;
     TextView dateTest;
@@ -55,7 +36,6 @@ public class ViewPatientActivity extends AppCompatActivity {
 
     // proceeding fragment
     WaitFragment waitFragment;
-    FragmentManager fm;
     private TextView color_ir;
     private TextView color_id;
 

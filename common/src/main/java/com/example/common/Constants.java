@@ -7,16 +7,12 @@ public class Constants {
 
     // messages and values
     public static final String HEART_RATE_VALUE = "com.example.common.HEART_RATE_VALUE";
-    public static final String HEART_RATE_MSG = "heart rate";
     public static final String MEASURE_1_MSG = "m1";
     public static final String MEASURE_2_MSG = "m2";
     public static final String MEASURE_3_MSG = "m3";
     public static final String START_MEASURE_MSG = "start measure";
 
     // pathes
-    public static final String HEART_RATE_MEASURE_1_PATH="/m1";
-    public static final String HEART_RATE_MEASURE_2_PATH="/m2";
-    public static final String HEART_RATE_MEASURE_3_PATH="/m3";
     public static final String HEART_RATE_COUNT_PATH="/count";
     public static final String START_MEASURE_PATH="/start";
 
@@ -26,7 +22,7 @@ public class Constants {
     public static final String HEART_MEASURE_3 = "com.example.common.HEART_MEASURE_3";
 
     // duration of all heartrate measures (in milisec)
-    public static final int MEASURE_DURATION = 20 * 1000;
+    public static final int MEASURE_DURATION = 10 * 1000;
 
     // check if measure started
     public static final String START_MEASURE = "com.example.common.START_MEASURE";
