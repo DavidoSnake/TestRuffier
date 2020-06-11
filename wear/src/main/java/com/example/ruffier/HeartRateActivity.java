@@ -76,15 +76,16 @@ public class HeartRateActivity extends WearableActivity {
         @Override
         public void onFinish() {
             stopService(rateServiceIntent);
-            isTimerRunning = false;
             description.setText("");
             title.setText("");
             if (measureNb == 1) {
+                isTimerRunning = false;
                 setButtonClickListener(2);
                 done.setText("Continuer");
                 done.setVisibility(View.VISIBLE);
                 description.setText("A chaque fois que vous sentirez une vibration, faites une flexion");
             } else if (measureNb == 2) {
+                isTimerRunning = false;
                 title.setText("Allongez vous");
             } else if (measureNb == 3) {
                 title.setText("Test terminé");
@@ -110,12 +111,12 @@ public class HeartRateActivity extends WearableActivity {
             Log.d(TAG, "onTick3");
             // vibrate
             vibrator.vibrate(100);
-            title.setText("" + l/1500);
+            title.setText("" + l / 1500);
         }
 
         @Override
         public void onFinish() {
-            //timer2.start();
+            title.setText("Allongez vous");
             timer1.start();
             startService(rateServiceIntent);
         }
@@ -164,7 +165,7 @@ public class HeartRateActivity extends WearableActivity {
                         // measuresList3.add(mRate);
                         break;
                     default:
-                        Log.d(TAG, "unknow message");
+                        Log.e(TAG, "unknow message");
                 }
                 if (!isTimerRunning) {
                     timer2.start();
@@ -174,6 +175,7 @@ public class HeartRateActivity extends WearableActivity {
         };
 
         checkBodySensorPermissionisRequired();
+
         // enable always-on
         setAmbientEnabled();
 
@@ -206,7 +208,7 @@ public class HeartRateActivity extends WearableActivity {
                         @Override
                         public void onTick(long l) {
                             Log.d(TAG, "beforeFlex");
-                            title.setText("Début dans " + l/1000);
+                            title.setText("Début dans " + l / 1000);
                         }
 
                         @Override
@@ -252,6 +254,7 @@ public class HeartRateActivity extends WearableActivity {
     }
 
     public void checkBodySensorPermissionisRequired() {
+
         // Check if the BODY_SENSOR permission is already available.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
                 != PackageManager.PERMISSION_GRANTED) {

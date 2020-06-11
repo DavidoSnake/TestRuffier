@@ -80,7 +80,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
+        showAll();
         super.onResume();
+    }
+
+    private void showAll() {
+        array.clear();
+        List<Patient> listPatients = dbHandler.getAllPatients();
+        if (listPatients.size() != 0) {
+            array.addAll(listPatients);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -95,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -162,7 +171,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else {
             resultFound = true;
-            Toast.makeText(this, "Veuillez remplir les champs", Toast.LENGTH_SHORT).show();
+            showAll();
+            //Toast.makeText(this, "Veuillez remplir les champs", Toast.LENGTH_SHORT).show();
         }
         if (!resultFound) {
             Toast.makeText(this, "Aucun résultat trouvé", Toast.LENGTH_SHORT).show();

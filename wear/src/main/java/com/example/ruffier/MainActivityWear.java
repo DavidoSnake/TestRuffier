@@ -21,7 +21,6 @@ import static com.example.common.Constants.START_MEASURE_PATH;
 public class MainActivityWear extends WearableActivity implements DataClient.OnDataChangedListener {
 
 
-
     private static final String TAG = "MainActivityWear";
 
     @Override
@@ -37,8 +36,7 @@ public class MainActivityWear extends WearableActivity implements DataClient.OnD
 
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
-        Log.d(TAG, "OnDataChanged"+ dataEventBuffer);
-        System.out.println("DataCahnged");
+        Log.d(TAG, "OnDataChanged" + dataEventBuffer);
 
         for (DataEvent event : dataEventBuffer) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {

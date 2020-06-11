@@ -6,7 +6,6 @@ import java.util.List;
 public class Constants {
 
     // messages and values
-    public static final String HEART_RATE_VALUE = "com.example.common.HEART_RATE_VALUE";
     public static final String MEASURE_1_MSG = "m1";
     public static final String MEASURE_2_MSG = "m2";
     public static final String MEASURE_3_MSG = "m3";

@@ -131,7 +131,7 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
     public List<Patient> getPatientsByFirstname(String firstname) {
         // create a list of patients with the same name
         List<Patient> patientList = new ArrayList<>();
-        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_FIRSTNAME + " LIKE \"" + firstname + "\";";
+        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_FIRSTNAME + " LIKE \"" + firstname + "%\";";
 
         SQLiteDatabase sqlDB = this.getReadableDatabase();
         Cursor cursor = sqlDB.rawQuery(query, null);
@@ -179,7 +179,45 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
     public List<Patient> getPatientsByLastname(String lastname) {
         // create a list of patients with the same name
         List<Patient> patientList = new ArrayList<>();
-        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_LASTNAME + " LIKE \"" + lastname + "\";";
+        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_LASTNAME + " LIKE \"" + lastname + "%\";";
+
+        SQLiteDatabase sqlDB = this.getReadableDatabase();
+        Cursor cursor = sqlDB.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+                    Patient patient = new Patient();
+                    int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(PATIENT_COLUMN_ID)));
+                    String fname = cursor.getString(cursor.getColumnIndex(PATIENT_COLUMN_FIRSTNAME));
+                    String lname = cursor.getString(cursor.getColumnIndex(PATIENT_COLUMN_LASTNAME));
+                    String m1 = cursor.getString(cursor.getColumnIndex(PATIENT_MEASURE_1));
+                    String m2 = cursor.getString(cursor.getColumnIndex(PATIENT_MEASURE_2));
+                    String m3 = cursor.getString(cursor.getColumnIndex(PATIENT_MEASURE_3));
+                    String sDateTest = cursor.getString(cursor.getColumnIndex(PATIENT_COLUMN_DATE));
+
+                    patient.setId(id);
+                    patient.setFirstname(fname);
+                    patient.setLastname(lname);
+                    patient.setDateTest(sDateTest);
+
+                    patientList.add(patient);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } while (cursor.moveToNext());
+        }
+
+        sqlDB.close();
+        cursor.close();
+
+        return patientList;
+    }
+
+    public List<Patient> getAllPatients() {
+        // create a list of patients with the same name
+        List<Patient> patientList = new ArrayList<>();
+        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + ";";
 
         SQLiteDatabase sqlDB = this.getReadableDatabase();
         Cursor cursor = sqlDB.rawQuery(query, null);
@@ -315,8 +353,14 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
     public void addDate(int id, String sDate) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "UPDATE " + PATIENT_TABLE_NAME + " SET " + PATIENT_COLUMN_DATE + "  = \"" + sDate + "\" WHERE " + PATIENT_COLUMN_ID + " = " + id + ";";
+        Log.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
     }
 
-    //todo: patient delete function
+    public void deletePatient(int id) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        String sql = "DELETE FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_ID + " = " + id + ";";
+        Log.d(TAG, sql);
+        sqLiteDatabase.execSQL(sql);
+    }
 }

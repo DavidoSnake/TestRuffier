@@ -2,6 +2,7 @@ package com.example.ruffier;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ public class ViewPatientActivity extends AppCompatActivity {
     TextView index_ir;
     TextView index_id;
     static int patientId;
+    SQLiteDBHandler sqlDb;
 
     // start the measure on wear
     Button startMeasure;
@@ -38,6 +40,7 @@ public class ViewPatientActivity extends AppCompatActivity {
     WaitFragment waitFragment;
     private TextView color_ir;
     private TextView color_id;
+    private String TAG = "ViewPatientActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,20 +94,16 @@ public class ViewPatientActivity extends AppCompatActivity {
             if (ir <= 0) {
                 color_ir.setBackgroundColor(Color.argb(100, 0, 255, 0));
                 color_ir.setText("très bon");
-            }
-            else if (ir <= 5) {
+            } else if (ir <= 5) {
                 color_ir.setBackgroundColor(Color.argb(100, 128, 255, 0));
                 color_ir.setText("bon");
-            }
-            else if (ir <= 10) {
+            } else if (ir <= 10) {
                 color_ir.setBackgroundColor(Color.argb(100, 255, 255, 0));
                 color_ir.setText("moyen");
-            }
-            else if (ir <= 15) {
+            } else if (ir <= 15) {
                 color_ir.setBackgroundColor(Color.argb(100, 255, 128, 0));
                 color_ir.setText("insuffisant");
-            }
-            else if (ir > 15) {
+            } else if (ir > 15) {
                 color_ir.setBackgroundColor(Color.argb(100, 255, 0, 0));
                 color_ir.setText("mauvais");
             }
@@ -112,28 +111,22 @@ public class ViewPatientActivity extends AppCompatActivity {
             if (id <= 0) {
                 color_id.setBackgroundColor(Color.argb(100, 0, 255, 0));
                 color_id.setText("exellent");
-            }
-            else if (id <= 2) {
+            } else if (id <= 2) {
                 color_id.setBackgroundColor(Color.argb(100, 64, 255, 0));
                 color_id.setText("très bon");
-            }
-            else if (id <= 4) {
+            } else if (id <= 4) {
                 color_id.setBackgroundColor(Color.argb(100, 128, 255, 0));
                 color_id.setText("bon");
-            }
-            else if (id <= 6) {
+            } else if (id <= 6) {
                 color_id.setBackgroundColor(Color.argb(100, 255, 255, 0));
                 color_id.setText("moyen");
-            }
-            else if (id <= 8) {
+            } else if (id <= 8) {
                 color_id.setBackgroundColor(Color.argb(100, 255, 194, 0));
                 color_id.setText("faible");
-            }
-            else if (id <= 10) {
+            } else if (id <= 10) {
                 color_id.setBackgroundColor(Color.argb(100, 255, 64, 0));
                 color_id.setText("très faible");
-            }
-            else if (id > 10) {
+            } else if (id > 10) {
                 color_id.setBackgroundColor(Color.argb(100, 204, 0, 0));
                 color_id.setText("mauvais");
             }
@@ -141,7 +134,7 @@ public class ViewPatientActivity extends AppCompatActivity {
 
         Toolbar tb = findViewById(R.id.toolbar2);
         setSupportActionBar(tb);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -159,17 +152,17 @@ public class ViewPatientActivity extends AppCompatActivity {
             }
         });
 
+        sqlDb = new SQLiteDBHandler(this);
     }
 
     // delete icon
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete) {
-            //todo: bouton supprimer
-            System.out.println("deletation");
-        } else {
-            finish();
+            sqlDb.deletePatient(patientId);
+            Log.d(TAG, "patient deleted");
         }
+        finish();
         return super.onOptionsItemSelected(item);
     }
 

@@ -59,11 +59,12 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     CountDownTimer timerBeforeDestroy = new CountDownTimer(3000, 1000) {
         @Override
         public void onTick(long l) {
-            Log.d(TAG, "destruction in " + l/1000);
+            Log.d(TAG, "destruction in " + l / 1000);
         }
 
         @Override
         public void onFinish() {
+            // destroys this fragment
             Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().remove(WaitFragment.this).commit();
         }
     };
@@ -99,7 +100,8 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     }
 
 
-//todo : prevent onResume to be called when the orientation changes
+    //todo : prevent onResume to be called when the orientation changes
+    // (currently solved by disabling lanscape orientation in manifest)
 
     @Override
     public void onResume() {
