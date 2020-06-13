@@ -61,8 +61,8 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
     public Patient getPatient(String firstname, String lastname) {
         // create a list of patients with the same name
         List<Patient> patientList = new ArrayList<>();
-        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_FIRSTNAME + " LIKE \"" + firstname + "\" "
-                + "AND " + PATIENT_COLUMN_LASTNAME + " LIKE \"" + lastname + "\";";
+        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_FIRSTNAME + " LIKE \"" + firstname + "%\" "
+                + "AND " + PATIENT_COLUMN_LASTNAME + " LIKE \"" + lastname + "%\";";
         Log.d(TAG, "getPatient");
 
         SQLiteDatabase sqlDB = this.getReadableDatabase();

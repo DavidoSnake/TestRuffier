@@ -7,28 +7,6 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <Button
-        android:id="@+id/startMeasureButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="124dp"
-        android:text="Commencer le test"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTest" />
-
-    <FrameLayout
-        android:id="@+id/flayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/toolbar2"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </FrameLayout>
-
     <TextView
         android:id="@+id/patient_fname"
         android:layout_width="wrap_content"
@@ -39,6 +17,19 @@
         app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+
+    <Button
+        android:id="@+id/startMeasureButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Commencer le test"
+        app:layout_constraintBottom_toBottomOf="@+id/flayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/color_ir"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/patient_lname"
@@ -83,10 +74,10 @@
         android:id="@+id/dateTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="52dp"
         android:text="aucun test effectué"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.649"
+        app:layout_constraintHorizontal_bias="0.71"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/show_m2" />
 
@@ -94,40 +85,43 @@
         android:id="@+id/index_ir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:text="Pas de données"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTest" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/index_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="84dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:text="Pas de données"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="32dp"
+        android:text="Indice de Ruffier-Dickson :"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.74"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/dateTest" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="12dp"
-        android:text="Ir"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="48dp"
+        android:text="Indice de Ruffier :"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTest" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="84dp"
-        android:text="Id"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateTest" />
 
     <TextView
@@ -144,8 +138,8 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="24dp"
         android:text="Date du dernier test :"
         app:layout_constraintEnd_toStartOf="@+id/dateTest"
         app:layout_constraintTop_toBottomOf="@+id/show_m2" />
@@ -154,10 +148,10 @@
         android:id="@+id/color_ir"
         android:layout_width="68dp"
         android:layout_height="46dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:background="#717171"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/index_ir" />
@@ -166,11 +160,10 @@
         android:id="@+id/color_id"
         android:layout_width="65dp"
         android:layout_height="47dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="84dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:background="#717171"
-        android:gravity="center_vertical"
-        android:textAlignment="center"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/index_id" />
 
@@ -184,5 +177,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/flayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

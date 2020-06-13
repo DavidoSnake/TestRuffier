@@ -1,10 +1,6 @@
 package com.example.ruffier;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -16,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.common.Constants;
 import com.example.common.SQLiteDBHandler;
 import com.example.testruffier.R;
 import com.google.android.gms.wearable.DataClient;
@@ -36,7 +31,6 @@ import static com.example.common.Constants.HEART_MEASURE_1;
 import static com.example.common.Constants.HEART_MEASURE_2;
 import static com.example.common.Constants.HEART_MEASURE_3;
 import static com.example.common.Constants.HEART_RATE_COUNT_PATH;
-import static com.example.common.Constants.START_MEASURE_MSG;
 
 public class WaitFragment extends androidx.fragment.app.Fragment implements DataClient.OnDataChangedListener {
 
@@ -46,10 +40,9 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     TextView m2;
     TextView m3;
     DataClient mDataClient;
-    BroadcastReceiver br;
+
     SyncAsyncTasksMobile mSyncAsyncTasksMobile;
-    Intent intent;
-    IntentFilter intentFilter;
+
     int meas1 = 0;
     int meas2 = 0;
     int meas3 = 0;
@@ -80,53 +73,37 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         m3 = rootView.findViewById(R.id.m3);
 
         mDataClient = Wearable.getDataClient(Objects.requireNonNull(getActivity()));
-        br = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d(TAG, "onReceive");
-                System.out.println("oneceive");
-                int startMeasure = intent.getIntExtra(Constants.START_MEASURE, 0);
-                mSyncAsyncTasksMobile = new SyncAsyncTasksMobile(getActivity());
-                mSyncAsyncTasksMobile.execute(startMeasure);
-            }
-        };
-        intent = new Intent(getActivity(), BroadcastService.class);
+
+        mSyncAsyncTasksMobile = new SyncAsyncTasksMobile(getActivity());
+        mSyncAsyncTasksMobile.execute(0);
 
         Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
         dbHandler = new SQLiteDBHandler(getContext());
         patientId = ViewPatientActivity.patientId;
 
+        Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
+
         return rootView;
     }
-
-
-    //todo : prevent onResume to be called when the orientation changes
-    // (currently solved by disabling lanscape orientation in manifest)
 
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
         System.out.println("onresume");
-        Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
-        intentFilter = new IntentFilter(START_MEASURE_MSG);
-        Objects.requireNonNull(getActivity()).registerReceiver(br, intentFilter);
-        getActivity().startService(intent);
     }
 
     @Override
     public void onPause() {
         System.out.println("onPausewait");
         super.onPause();
-        Wearable.getDataClient(Objects.requireNonNull(getContext())).removeListener(this);
-        Objects.requireNonNull(getActivity()).stopService(intent);
-        getActivity().unregisterReceiver(br);
     }
 
     @Override
     public void onDestroyView() {
         System.out.println("waitDestroyed");
         super.onDestroyView();
+        Wearable.getDataClient(Objects.requireNonNull(getContext())).removeListener(this);
         Objects.requireNonNull(getActivity()).finish();
         startActivity(getActivity().getIntent());
     }

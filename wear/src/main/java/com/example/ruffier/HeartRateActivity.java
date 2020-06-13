@@ -123,7 +123,7 @@ public class HeartRateActivity extends WearableActivity {
     };
 
 
-    static Button done;
+    Button done;
     int mRate = 0;
     Vibrator vibrator;
     private boolean isTimerRunning = false;

@@ -27,7 +27,7 @@ public class WearHeartRateService extends Service implements SensorEventListener
 
     SyncAsyncTaskWear mSyncAsyncTaskWear = null;
 
-    public static final String TAG = "WearHeartRateService";
+    public final String TAG = "WearHeartRateService";
     private SensorManager sensorManager;
     private Sensor heartRateSensor;
     private int heartRate = 0;

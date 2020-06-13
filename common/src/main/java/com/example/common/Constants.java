@@ -26,9 +26,6 @@ public class Constants {
     // check if measure started
     public static final String START_MEASURE = "com.example.common.START_MEASURE";
 
-    // used to send different signal in order to trigger ondatachange on MainActivityWear class
-    public static boolean changeValue = false;
-
     // list of measures done on MEASURE_DURATION time
     public static List<Integer> measuresList1 = new ArrayList<>();
     public static List<Integer> measuresList2 = new ArrayList<>();

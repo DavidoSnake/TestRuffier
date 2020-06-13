@@ -22,11 +22,12 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.ruffier.AddPatientActivity" />
+
 <!--      preventing landscape orientation to avoid additional data sending (see waitfragment for more details)  -->
         <activity android:name="com.example.ruffier.ViewPatientActivity"
             android:screenOrientation="portrait"
             />
-        <service android:name="com.example.ruffier.BroadcastService"/>
+
     </application>
 
 

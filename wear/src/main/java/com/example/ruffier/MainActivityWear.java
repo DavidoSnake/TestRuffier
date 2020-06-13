@@ -21,7 +21,7 @@ import static com.example.common.Constants.START_MEASURE_PATH;
 public class MainActivityWear extends WearableActivity implements DataClient.OnDataChangedListener {
 
 
-    private static final String TAG = "MainActivityWear";
+    private final String TAG = "MainActivityWear";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

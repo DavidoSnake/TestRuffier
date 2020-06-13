@@ -30,7 +30,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private static final String TAG = "mobile";
+    private final String TAG = "MainActivity";
 
     Button searchB;
     EditText fname;
