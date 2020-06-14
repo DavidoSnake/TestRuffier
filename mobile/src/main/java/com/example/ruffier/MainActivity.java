@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<Patient> listPatients = dbHandler.getAllPatients();
         if (listPatients.size() != 0) {
             array.addAll(listPatients);
-            adapter.notifyDataSetChanged();
         }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
