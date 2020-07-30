@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -25,7 +26,7 @@ import static com.example.common.Constants.measuresList3;
 
 public class WearHeartRateService extends Service implements SensorEventListener {
 
-    SyncAsyncTaskWear mSyncAsyncTaskWear = null;
+    SyncAsyncTaskWearRunningTest mSyncAsyncTaskWearRunningTest = null;
 
     public final String TAG = "WearHeartRateService";
     private SensorManager sensorManager;
@@ -46,8 +47,31 @@ public class WearHeartRateService extends Service implements SensorEventListener
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        // call to updatemesurelist a intervalle regulier (timer)
+        if (measureNb == 1)
+            stepRate = 65;
+        if (measureNb == 2)
+            stepRate = 90;
+        if (measureNb == 3)
+            stepRate = 75;
+        heartEmulator.start();
         return super.onStartCommand(intent, flags, startId);
     }
+
+    int stepRate;
+
+    CountDownTimer heartEmulator = new CountDownTimer(10000, 9000) {
+        @Override
+        public void onTick(long l) {
+            heartRate = (int) (Math.random()*5 + stepRate);
+            updateMeasuresList();
+        }
+
+        @Override
+        public void onFinish() {
+
+        }
+    };
 
     @Nullable
     @Override
@@ -145,8 +169,8 @@ public class WearHeartRateService extends Service implements SensorEventListener
         Log.d(TAG, "onDestroy");
         finishService();
         // result send to asynctask
-        mSyncAsyncTaskWear = new SyncAsyncTaskWear(getApplicationContext(), measureNb);
-        mSyncAsyncTaskWear.execute(res);
+        mSyncAsyncTaskWearRunningTest = new SyncAsyncTaskWearRunningTest(getApplicationContext(), measureNb);
+        mSyncAsyncTaskWearRunningTest.execute(res);
         measureNb++;
         sensorManager.unregisterListener(this);
         //super.onDestroy();

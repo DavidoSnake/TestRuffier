@@ -41,7 +41,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     TextView m3;
     DataClient mDataClient;
 
-    SyncAsyncTasksMobile mSyncAsyncTasksMobile;
+    SyncAsyncTasksMobileRunningTest mSyncAsyncTasksMobileRunningTest;
 
     int meas1 = 0;
     int meas2 = 0;
@@ -74,14 +74,14 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
 
         mDataClient = Wearable.getDataClient(Objects.requireNonNull(getActivity()));
 
-        mSyncAsyncTasksMobile = new SyncAsyncTasksMobile(getActivity());
-        mSyncAsyncTasksMobile.execute(0);
+        mSyncAsyncTasksMobileRunningTest = new SyncAsyncTasksMobileRunningTest(getActivity());
+        mSyncAsyncTasksMobileRunningTest.execute(0);
 
         Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
         dbHandler = new SQLiteDBHandler(getContext());
         patientId = ViewPatientActivity.patientId;
 
-        Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
+        //Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
 
         return rootView;
     }

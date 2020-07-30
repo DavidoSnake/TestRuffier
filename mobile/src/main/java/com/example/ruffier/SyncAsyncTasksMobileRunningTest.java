@@ -14,11 +14,11 @@ import java.util.Date;
 import static com.example.common.Constants.START_MEASURE;
 import static com.example.common.Constants.START_MEASURE_PATH;
 
-public class SyncAsyncTasksMobile extends AsyncTask<Integer, Integer, Integer> {
+public class SyncAsyncTasksMobileRunningTest extends AsyncTask<Integer, Integer, Integer> {
 
     private DataClient mDataClient;
 
-    SyncAsyncTasksMobile(Context mContext) {
+    SyncAsyncTasksMobileRunningTest(Context mContext) {
         super();
         mDataClient = Wearable.getDataClient(mContext);
     }

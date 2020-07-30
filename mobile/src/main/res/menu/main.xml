@@ -7,4 +7,12 @@
         android:icon="@android:drawable/ic_menu_add"
         android:title="add"
         app:showAsAction="ifRoom" />
+    <group >
+        <item
+            android:id="@+id/options"
+            android:title="Options" />
+        <item
+            android:id="@+id/infos"
+            android:title="Infos" />
+    </group>
 </menu>

@@ -16,12 +16,12 @@ import static com.example.common.Constants.HEART_MEASURE_2;
 import static com.example.common.Constants.HEART_MEASURE_3;
 import static com.example.common.Constants.HEART_RATE_COUNT_PATH;
 
-public class SyncAsyncTaskWear extends AsyncTask<Integer, Integer, Integer> {
+public class SyncAsyncTaskWearRunningTest extends AsyncTask<Integer, Integer, Integer> {
 
     private DataClient mDataClient;
     int measure_nb;
 
-    SyncAsyncTaskWear(Context mContext, int measure_nb) {
+    SyncAsyncTaskWearRunningTest(Context mContext, int measure_nb) {
         super();
         mDataClient = Wearable.getDataClient(mContext);
         this.measure_nb = measure_nb;

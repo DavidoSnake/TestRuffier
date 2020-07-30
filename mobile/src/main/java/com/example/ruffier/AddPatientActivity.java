@@ -1,7 +1,9 @@
 package com.example.ruffier;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -89,7 +91,8 @@ public class AddPatientActivity extends AppCompatActivity implements View.OnClic
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
         assert imm != null;
-        if(imm.isAcceptingText()) { // verify if the soft keyboard is open
+        if(imm.isAcceptingText()) {
+            // verify if the soft keyboard is open
             imm.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
         }
     }
@@ -104,5 +107,11 @@ public class AddPatientActivity extends AppCompatActivity implements View.OnClic
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.no_item_view, menu);
+        return true;
     }
 }

@@ -14,6 +14,8 @@ public class Constants {
     // pathes
     public static final String HEART_RATE_COUNT_PATH="/count";
     public static final String START_MEASURE_PATH="/start";
+    public static final String REDIRECT_MOBILE_PATH = "/redirect_mobile";
+    public static final String REDIRECT_WEAR_PATH = "/redirect_wear";
 
     // measures
     public static final String HEART_MEASURE_1 = "com.example.common.HEART_MEASURE_1";
@@ -33,4 +35,8 @@ public class Constants {
 
     // current measure number
     public static int measureNb = 1;
+
+    // check if redirect button has been pushed
+    public static final String REDIRECT_MOBILE = "com.example.common.REDIRECT_MOBILE";
+    public static final String REDIRECT_WEAR = "com.example.common.REDIRECT_WEAR";
 }

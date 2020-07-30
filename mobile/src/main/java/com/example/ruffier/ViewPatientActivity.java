@@ -1,6 +1,7 @@
 package com.example.ruffier;
 
-import android.content.pm.ActivityInfo;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -24,7 +26,6 @@ import com.example.testruffier.R;
 public class ViewPatientActivity extends AppCompatActivity {
 
     TextView pat_fname;
-    TextView pat_lname;
     TextView dateTest;
     TextView show_m1;
     TextView show_m2;
@@ -33,6 +34,7 @@ public class ViewPatientActivity extends AppCompatActivity {
     TextView index_id;
     static int patientId;
     SQLiteDBHandler sqlDb;
+    Context mContext;
 
     // start the measure on wear
     Button startMeasure;
@@ -48,6 +50,7 @@ public class ViewPatientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
             System.out.println("need to restart");
             setContentView(R.layout.view_patient_activity);
+            mContext = this;
 
             // get patient id
             patientId = getIntent().getIntExtra("PATIENT_ID", 0);
@@ -55,11 +58,8 @@ public class ViewPatientActivity extends AppCompatActivity {
             Patient p = db.getPatientById(patientId);
 
             // fill all fields
-            pat_fname = findViewById(R.id.patient_fname);
-            pat_fname.setText(p.getFirstname());
-
-            pat_lname = findViewById(R.id.patient_lname);
-            pat_lname.setText(p.getLastname());
+            pat_fname = findViewById(R.id.patient_fullname);
+            pat_fname.setText(p.getFirstname() + " " + p.getLastname());
 
             dateTest = findViewById(R.id.dateTest);
             dateTest.setText(p.getDateTest());
@@ -134,6 +134,7 @@ public class ViewPatientActivity extends AppCompatActivity {
                 }
             }
 
+            // back button
             Toolbar tb = findViewById(R.id.toolbar2);
             setSupportActionBar(tb);
             if (getSupportActionBar() != null) {
@@ -161,10 +162,26 @@ public class ViewPatientActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete) {
-            sqlDb.deletePatient(patientId);
-            Log.d(TAG, "patient deleted");
+            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+            alert.setTitle("Suppression")
+                .setMessage("Supprimer définitivement cette entrée ?")
+                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sqlDb.deletePatient(patientId);
+                        Log.d(TAG, "patient deleted");
+                        finish();
+                    }
+                })
+                .setNegativeButton("Non", null)
+                    //todo: change icon
+                    .setIcon(R.drawable.common_google_signin_btn_icon_dark)
+                .show();
+          // sqlDb.deletePatient(patientId);
+        } else {
+            System.out.println("back arrow");
+            finish();
         }
-        finish();
         return super.onOptionsItemSelected(item);
     }
 

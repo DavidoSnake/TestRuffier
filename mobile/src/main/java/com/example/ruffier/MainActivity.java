@@ -1,7 +1,11 @@
 package com.example.ruffier;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +25,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.common.Patient;
 import com.example.common.SQLiteDBHandler;
@@ -35,10 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button searchB;
     EditText fname;
     EditText lname;
+    FrameLayout noEntry;
+    Button emptyBtn;
+
 
     // results list
     List<Patient> array = new ArrayList<>();
     ArrayAdapter<Patient> adapter;
+    ListView listView;
 
     // used to get patients
     SQLiteDBHandler dbHandler;
@@ -55,6 +67,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchB = findViewById(R.id.searchB);
         fname = findViewById(R.id.fname);
         lname = findViewById(R.id.lname);
+        noEntry = findViewById(R.id.noEntry);
+        emptyBtn = new Button(this);
+
+        emptyBtn.setText("Ajouter un nouveau patient");
+        emptyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddPatientActivity.class);
+                startActivity(intent);
+            }
+        });
 
         lname.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -73,9 +96,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         adapter = new ArrayAdapter<>(this, R.layout.list_cell, array);
 
-        ListView listView = (ListView) findViewById(R.id.list);
+        listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
+
+        // first use screen
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
+        if(!previouslyStarted) {
+            Log.d(TAG, "first app opening");
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putBoolean(getString(R.string.pref_previously_started), Boolean.TRUE);
+            edit.apply();
+            showTuto();
+        }
     }
 
     @Override
@@ -84,13 +118,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
     }
 
+    // shows quick start instructions and informations
+    public void showTuto() {
+        Intent intent = new Intent(this, FirstUseActivity.class);
+        startActivity(intent);
+    }
+
     private void showAll() {
         array.clear();
         List<Patient> listPatients = dbHandler.getAllPatients();
+        noEntry.removeAllViewsInLayout();
         if (listPatients.size() != 0) {
+            Log.d(TAG, "list not empty");
             array.addAll(listPatients);
-            adapter.notifyDataSetChanged();
+        } else {
+            Log.d(TAG, "list empty");
+            noEntry.addView(emptyBtn);
         }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -102,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.add) {
             Intent intent = new Intent(this, AddPatientActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (item.getItemId() == R.id.infos) {
+            Intent intent = new Intent(this, MoreInfoActivity.class);
             startActivity(intent);
             return true;
         }
