@@ -40,13 +40,15 @@ public class MainActivityWear extends WearableActivity implements DataClient.OnD
 
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
-        Log.d(TAG, "OnDataChanged" + dataEventBuffer);
+        Log.d(TAG, "OnDataChanged " + dataEventBuffer);
 
         for (DataEvent event : dataEventBuffer) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
                 // DataItem changed
                 DataItem item = event.getDataItem();
                 if (Objects.requireNonNull(item.getUri().getPath()).compareTo(START_MEASURE_PATH) == 0) {
+                    Log.d(TAG, "OnDataChanged : start signal");
+                    //todo: check if activity is no already running
                     Intent intent = new Intent(getApplicationContext(), HeartRateActivity.class);
                     startActivity(intent);
                 }

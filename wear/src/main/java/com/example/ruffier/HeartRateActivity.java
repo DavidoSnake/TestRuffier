@@ -22,11 +22,17 @@ import androidx.core.app.ActivityCompat;
 import com.example.common.Constants;
 import com.example.testruffier.R;
 import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.Objects;
 
 import static com.example.common.Constants.MEASURE_DURATION;
+import static com.example.common.Constants.START_MEASURE_PATH;
+import static com.example.common.Constants.STOP_MEASURE;
+import static com.example.common.Constants.STOP_MEASURE_PATH;
 import static com.example.common.Constants.measureNb;
 import static com.example.common.Constants.measuresList1;
 import static com.example.common.Constants.MEASURE_1_MSG;
@@ -35,7 +41,7 @@ import static com.example.common.Constants.MEASURE_3_MSG;
 import static com.example.common.Constants.measuresList2;
 import static com.example.common.Constants.measuresList3;
 
-public class HeartRateActivity extends WearableActivity {
+public class HeartRateActivity extends WearableActivity implements DataClient.OnDataChangedListener {
 
     final String TAG = "HeartRateActivity";
     TextView title;
@@ -127,6 +133,7 @@ public class HeartRateActivity extends WearableActivity {
     int mRate = 0;
     Vibrator vibrator;
     private boolean isTimerRunning = false;
+    private SyncAsyncTaskWearRunningTest mSyncAsyncTaskWearRunningTest;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,6 +143,10 @@ public class HeartRateActivity extends WearableActivity {
         description = findViewById(R.id.description);
 
         mDataClient = Wearable.getDataClient(this);
+
+        // send start of test msg
+        mSyncAsyncTaskWearRunningTest = new SyncAsyncTaskWearRunningTest(getApplicationContext(), 0);
+        mSyncAsyncTaskWearRunningTest.execute(0);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -184,6 +195,8 @@ public class HeartRateActivity extends WearableActivity {
 
         rateServiceIntent = new Intent(getApplicationContext(), WearHeartRateService.class);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+        Wearable.getDataClient(this).addListener(this);
     }
 
     public void setButtonClickListener(int step) {
@@ -270,8 +283,7 @@ public class HeartRateActivity extends WearableActivity {
      * Callback received when a permissions request has been completed.
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         if (requestCode == BOYDY_SENSOR_PERMISSION_CODE) {
             // BEGIN_INCLUDE(permission_result)
@@ -289,6 +301,24 @@ public class HeartRateActivity extends WearableActivity {
             // END_INCLUDE(permission_result)
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+    @Override
+    public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
+        Log.d(TAG, "OnDataChanged" + dataEventBuffer);
+
+        for (DataEvent event : dataEventBuffer) {
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+                // DataItem changed
+                DataItem item = event.getDataItem();
+                if (Objects.requireNonNull(item.getUri().getPath()).compareTo(STOP_MEASURE_PATH) == 0) {
+                    // cancel button clicked on mobile
+                    Log.d(TAG, "cancel called on mobile");
+                    finish();
+                }
+            }
         }
     }
 }

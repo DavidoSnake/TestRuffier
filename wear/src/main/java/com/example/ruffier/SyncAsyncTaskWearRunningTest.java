@@ -11,6 +11,8 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.Date;
 
+import static com.example.common.Constants.DEVICES_SYNC;
+import static com.example.common.Constants.DEVICES_SYNC_PATH;
 import static com.example.common.Constants.HEART_MEASURE_1;
 import static com.example.common.Constants.HEART_MEASURE_2;
 import static com.example.common.Constants.HEART_MEASURE_3;
@@ -29,23 +31,34 @@ public class SyncAsyncTaskWearRunningTest extends AsyncTask<Integer, Integer, In
 
     @Override
     protected Integer doInBackground(Integer... params) {
-        int heartRateCount = params[0];
+        int flags = params[0];
 
-        PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(HEART_RATE_COUNT_PATH);
-        if (measure_nb == 1) {
-            putDataMapRequest.getDataMap().putInt(HEART_MEASURE_1, heartRateCount);
-        } else if (measure_nb == 2) {
-            putDataMapRequest.getDataMap().putInt(HEART_MEASURE_2, heartRateCount);
-        } else if (measure_nb == 3) {
-            putDataMapRequest.getDataMap().putInt(HEART_MEASURE_3, heartRateCount);
+        PutDataMapRequest dataMapRate = PutDataMapRequest.create(HEART_RATE_COUNT_PATH);
+        PutDataMapRequest dataMapSync = PutDataMapRequest.create(DEVICES_SYNC_PATH);
+
+        PutDataRequest putDataReq;
+
+        if (measure_nb == 0) {
+            // send wear start of test signal
+            dataMapSync.getDataMap().putInt(DEVICES_SYNC, flags);
+            dataMapSync.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
+            putDataReq = dataMapSync.asPutDataRequest();
+        } else {
+            // send heart measures
+            if (measure_nb == 1) {
+                dataMapRate.getDataMap().putInt(HEART_MEASURE_1, flags);
+            } else if (measure_nb == 2) {
+                dataMapRate.getDataMap().putInt(HEART_MEASURE_2, flags);
+            } else if (measure_nb == 3) {
+                dataMapRate.getDataMap().putInt(HEART_MEASURE_3, flags);
+            }
+            dataMapRate.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
+            putDataReq = dataMapRate.asPutDataRequest();
         }
-        putDataMapRequest.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
-        PutDataRequest putDataReq = putDataMapRequest.asPutDataRequest();
         putDataReq.setUrgent();
         try {
             mDataClient.putDataItem(putDataReq);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e("Sync", "Error uploading data to Mobile", e);
         }
         return -1;

@@ -13,6 +13,8 @@ import java.util.Date;
 
 import static com.example.common.Constants.START_MEASURE;
 import static com.example.common.Constants.START_MEASURE_PATH;
+import static com.example.common.Constants.STOP_MEASURE;
+import static com.example.common.Constants.STOP_MEASURE_PATH;
 
 public class SyncAsyncTasksMobileRunningTest extends AsyncTask<Integer, Integer, Integer> {
 
@@ -25,13 +27,23 @@ public class SyncAsyncTasksMobileRunningTest extends AsyncTask<Integer, Integer,
 
     @Override
     protected Integer doInBackground(Integer... integers) {
-        int startMeasure = integers[0];
+        int flags = integers[0];
 
-        PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(START_MEASURE_PATH);
-        putDataMapRequest.getDataMap().putInt(START_MEASURE, startMeasure);
-        putDataMapRequest.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
-        PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
-        putDataMapRequest.setUrgent();
+        PutDataMapRequest startDataMapRequest = PutDataMapRequest.create(START_MEASURE_PATH);
+        PutDataMapRequest stopDataMapRequest = PutDataMapRequest.create(STOP_MEASURE_PATH);
+
+        PutDataRequest putDataRequest;
+
+        if (flags == 0) {
+            startDataMapRequest.getDataMap().putInt(START_MEASURE, flags);
+            startDataMapRequest.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
+            putDataRequest = startDataMapRequest.asPutDataRequest();
+        } else {
+            stopDataMapRequest.getDataMap().putInt(STOP_MEASURE, flags);
+            stopDataMapRequest.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
+            putDataRequest = stopDataMapRequest.asPutDataRequest();
+        }
+        putDataRequest.setUrgent();
 
         try {
             mDataClient.putDataItem(putDataRequest);

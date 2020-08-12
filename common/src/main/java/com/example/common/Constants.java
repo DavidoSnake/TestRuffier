@@ -16,11 +16,15 @@ public class Constants {
     public static final String START_MEASURE_PATH="/start";
     public static final String REDIRECT_MOBILE_PATH = "/redirect_mobile";
     public static final String REDIRECT_WEAR_PATH = "/redirect_wear";
+    public static final String DEVICES_SYNC_PATH = "/sync";
+    public static final String STOP_MEASURE_PATH = "/stop";
 
     // measures
+    public static final String DEVICES_SYNC = "com.example.common.DEVICES_SYNC";
     public static final String HEART_MEASURE_1 = "com.example.common.HEART_MEASURE_1";
     public static final String HEART_MEASURE_2 = "com.example.common.HEART_MEASURE_2";
     public static final String HEART_MEASURE_3 = "com.example.common.HEART_MEASURE_3";
+    public static final String STOP_MEASURE = "com.example.common.STOP_MEASURE";
 
     // duration of all heartrate measures (in milisec)
     public static final int MEASURE_DURATION = 10 * 1000;
