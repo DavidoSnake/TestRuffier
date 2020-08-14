@@ -50,10 +50,10 @@
 
     <string name="calculs">
           <b>Exploitation des résultats :\n\n</b>
-        À partir des mesures obtenues, l\'indice de Ruffier (<i>Ir</i>) ainsi que l\'indice de Ruffier-Dickson (<i>Id</i>) sont calculés :\n\n
-        Ir = (<i>p0</i> + <i>p1</i> + <i>p2</i> - 200) / 10;\n
-        Id = ((<i>p1</i> - 70) + 2 * (<i>p2</i> - <i>p0</i>)) / 10;\n\n
-        <b>Interprétation :</b>
+        À partir des mesures obtenues, l\'indice de Ruffier (<b>Interprétation :</b>) ainsi que l\'indice de Ruffier-Dickson (<i>Ir</i>) sont calculés :\n\n
+        Ir = (<i>Id</i> + <i>p0</i> + <i>p1</i> - 200) / 10;\n
+        Id = ((<i>p2</i> - 70) + 2 * (<i>p1</i> - <i>p2</i>)) / 10;\n\n
+        <i>p0</i>
     </string>
 
     <string name="meaning">

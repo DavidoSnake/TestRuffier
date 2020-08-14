@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.common.SQLiteDBHandler;
 import com.example.testruffier.R;
@@ -70,7 +72,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         @Override
         public void onFinish() {
             // destroys this fragment
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().remove(WaitFragment.this).commit();
+            destroyFragment();
         }
     };
 
@@ -99,6 +101,8 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
 
         Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
         dbHandler = new SQLiteDBHandler(getContext());
+
+        //todo: remove static access (see mainactivity -> viewpatientactivity use)
         patientId = ViewPatientActivity.patientId;
 
         rootView.setFocusableInTouchMode(true);
@@ -120,7 +124,6 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        System.out.println("onresume");
     }
 
     @Override
@@ -134,8 +137,8 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         System.out.println("waitDestroyed");
         super.onDestroyView();
         Wearable.getDataClient(Objects.requireNonNull(getContext())).removeListener(this);
-        Objects.requireNonNull(getActivity()).finish();
-        startActivity(getActivity().getIntent());
+        //Objects.requireNonNull(getActivity()).finish();
+        //startActivity(getActivity().getIntent());
     }
 
     @SuppressLint("SetTextI18n")
@@ -203,13 +206,25 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         System.out.println("action cancelled");
                         // send cancel signal
                         stopTestTask.execute(1);
-                        Objects.requireNonNull(getActivity()).finish();
+                        //Objects.requireNonNull(getActivity()).finish();
+                        destroyFragment();
                     }
                 })
                 .setNegativeButton("Non", null)
-                //todo: change icon
-                .setIcon(R.drawable.common_google_signin_btn_icon_dark)
+                .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
         // sqlDb.deletePatient(patientId);
     }
+
+    private void destroyFragment() {
+        Button startMeasure = Objects.requireNonNull(getActivity()).findViewById(R.id.startMeasureButton);
+        startMeasure.setEnabled(true);
+        ((ViewPatientActivity) getActivity()).refreshFields();
+        FragmentManager fragmentManager = getFragmentManager();
+        assert fragmentManager != null;
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.remove(WaitFragment.this).commit();
+    }
+
+
 }

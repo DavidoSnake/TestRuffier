@@ -7,5 +7,10 @@
         android:orderInCategory="100"
         android:title="supprimer"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Edit"
+        app:showAsAction="ifRoom" />
 
 </menu>

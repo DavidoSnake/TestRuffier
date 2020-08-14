@@ -43,4 +43,5 @@ public class Constants {
     // check if redirect button has been pushed
     public static final String REDIRECT_MOBILE = "com.example.common.REDIRECT_MOBILE";
     public static final String REDIRECT_WEAR = "com.example.common.REDIRECT_WEAR";
+
 }

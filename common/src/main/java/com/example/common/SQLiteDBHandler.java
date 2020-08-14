@@ -17,7 +17,7 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
     Context mContext;
     final String TAG = "SQLiteDBHandler";
 
-    private static final int DATABASE_VERSION = 24;
+    private static final int DATABASE_VERSION = 25;
     public static final String DATABASE_NAME = "patients_database";
 
     // patients
@@ -360,6 +360,19 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
     public void deletePatient(int id) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "DELETE FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_ID + " = " + id + ";";
+        Log.d(TAG, sql);
+        sqLiteDatabase.execSQL(sql);
+    }
+
+    // edit all fields
+    public void editPatient(int id, String lastName, String firstName, String m1, String m2, String m3) {
+        int nb1 = Integer.parseInt(m1);
+        int nb2 = Integer.parseInt(m2);
+        int nb3 = Integer.parseInt(m3);
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        String sql = "UPDATE " + PATIENT_TABLE_NAME + " SET " + PATIENT_COLUMN_LASTNAME + " = \"" + lastName + "\", " + PATIENT_COLUMN_FIRSTNAME + " = \"" + firstName
+                + "\", " + PATIENT_MEASURE_1 + " = " + nb1 + ", " + PATIENT_MEASURE_2 + " = " + nb2 + ", " + PATIENT_MEASURE_3 + " = " + nb3 + " WHERE " + PATIENT_COLUMN_ID
+                + " = " + id + ";";
         Log.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
     }

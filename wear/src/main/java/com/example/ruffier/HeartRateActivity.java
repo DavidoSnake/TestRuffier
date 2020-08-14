@@ -259,9 +259,13 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
         Log.d(TAG, "onpause");
     }
 
+    //todo: test if timer cancels work
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        timer1.cancel();
+        timer2.cancel();
+        timer3.cancel();
         this.stopService(rateServiceIntent);
         this.unregisterReceiver(broadcastReceiver);
     }

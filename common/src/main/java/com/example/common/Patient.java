@@ -91,8 +91,7 @@ public class Patient {
     @Override
     public String toString() {
        /* return "id: " + id + " nom: " + lastname + " prénom: " + firstname + " mesure 1: " + measure_1
-                + " mesure 2: " + measure_2 + " mesure 3: " + measure_3 + " index 1: " + index_1
-                + " index 2: " + index_2 + " couleur 1: " + hint_index_1 + " couleur 2: " + hint_index_2;*/
+                + " mesure 2: " + measure_2 + " mesure 3: " + measure_3;*/
        return firstname + " " + lastname;
     }
 }
