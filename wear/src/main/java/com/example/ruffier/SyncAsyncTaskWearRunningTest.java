@@ -17,6 +17,8 @@ import static com.example.common.Constants.HEART_MEASURE_1;
 import static com.example.common.Constants.HEART_MEASURE_2;
 import static com.example.common.Constants.HEART_MEASURE_3;
 import static com.example.common.Constants.HEART_RATE_COUNT_PATH;
+import static com.example.common.Constants.QUIT_APP;
+import static com.example.common.Constants.WEAR_QUIT_APP_PATH;
 
 public class SyncAsyncTaskWearRunningTest extends AsyncTask<Integer, Integer, Integer> {
 
@@ -35,14 +37,22 @@ public class SyncAsyncTaskWearRunningTest extends AsyncTask<Integer, Integer, In
 
         PutDataMapRequest dataMapRate = PutDataMapRequest.create(HEART_RATE_COUNT_PATH);
         PutDataMapRequest dataMapSync = PutDataMapRequest.create(DEVICES_SYNC_PATH);
+        PutDataMapRequest quitDataMapRequest = PutDataMapRequest.create(WEAR_QUIT_APP_PATH);
 
         PutDataRequest putDataReq;
 
         if (measure_nb == 0) {
-            // send wear start of test signal
-            dataMapSync.getDataMap().putInt(DEVICES_SYNC, flags);
-            dataMapSync.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
-            putDataReq = dataMapSync.asPutDataRequest();
+            if (flags == 0) {
+                // send wear start of test signal
+                dataMapSync.getDataMap().putInt(DEVICES_SYNC, flags);
+                dataMapSync.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
+                putDataReq = dataMapSync.asPutDataRequest();
+            } else {
+                // send wear app quit signal
+                quitDataMapRequest.getDataMap().putInt(QUIT_APP, flags);
+                quitDataMapRequest.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
+                putDataReq = quitDataMapRequest.asPutDataRequest();
+            }
         } else {
             // send heart measures
             if (measure_nb == 1) {

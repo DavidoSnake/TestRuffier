@@ -34,8 +34,6 @@ public class MainActivityWear extends WearableActivity implements DataClient.OnD
 
         // Enables Always-on
         setAmbientEnabled();
-
-        Wearable.getDataClient(this).addListener(this);
     }
 
     @Override
@@ -48,13 +46,35 @@ public class MainActivityWear extends WearableActivity implements DataClient.OnD
                 DataItem item = event.getDataItem();
                 if (Objects.requireNonNull(item.getUri().getPath()).compareTo(START_MEASURE_PATH) == 0) {
                     Log.d(TAG, "OnDataChanged : start signal");
-                    //todo: check if activity is no already running
                     Intent intent = new Intent(getApplicationContext(), HeartRateActivity.class);
                     startActivity(intent);
                 }
             }
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Wearable.getDataClient(this).addListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPauseMain");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStopMain");
+        Wearable.getDataClient(this).removeListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
 

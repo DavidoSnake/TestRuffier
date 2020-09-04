@@ -2,6 +2,7 @@ package com.example.ruffier;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -38,6 +39,7 @@ import static com.example.common.Constants.HEART_MEASURE_1;
 import static com.example.common.Constants.HEART_MEASURE_2;
 import static com.example.common.Constants.HEART_MEASURE_3;
 import static com.example.common.Constants.HEART_RATE_COUNT_PATH;
+import static com.example.common.Constants.WEAR_QUIT_APP_PATH;
 
 public class WaitFragment extends androidx.fragment.app.Fragment implements DataClient.OnDataChangedListener, View.OnClickListener {
 
@@ -53,15 +55,18 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     TextView endTest;
 
     Button btn_cancel;
+    Button btn_sync;
 
     SyncAsyncTasksMobileRunningTest startTestTask;
     SyncAsyncTasksMobileRunningTest stopTestTask;
+    SyncAsyncTasksMobileRunningTest mobileQuitTestTask;
 
     int meas1 = 0;
     int meas2 = 0;
     int meas3 = 0;
     private SQLiteDBHandler dbHandler;
     private int patientId;
+    private boolean isProperDestroy = false;
 
     CountDownTimer timerBeforeDestroy = new CountDownTimer(3000, 1000) {
         @Override
@@ -72,6 +77,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         @Override
         public void onFinish() {
             // destroys this fragment
+            isProperDestroy = true;
             destroyFragment();
         }
     };
@@ -93,10 +99,22 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         btn_cancel = rootView.findViewById(R.id.btn_cancel);
         btn_cancel.setOnClickListener(this);
 
+
+        //todo: temp solution; auto sync tries all ~2-5 sec
+        btn_sync = rootView.findViewById(R.id.btn_sync);
+        btn_sync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
+                startTestTask.execute(0);
+            }
+        });
+
         mDataClient = Wearable.getDataClient(Objects.requireNonNull(getActivity()));
 
         stopTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
         startTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
+
         startTestTask.execute(0);
 
         Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
@@ -117,26 +135,35 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
             }
         });
 
+        mobileQuitTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
+
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
+        System.out.println("onresume waitfrag");
     }
 
     @Override
     public void onPause() {
-        System.out.println("onPausewait");
         super.onPause();
+        System.out.println("onPause waitfrag");
+        if (!isProperDestroy) {
+            System.out.println("not properly destroyed");
+            //todo: bug : messages envoyes en trop (+1 a chaque fois)
+
+            mobileQuitTestTask.execute(2);
+            destroyFragment();
+        }
     }
 
     @Override
     public void onDestroyView() {
-        System.out.println("waitDestroyed");
         super.onDestroyView();
         Wearable.getDataClient(Objects.requireNonNull(getContext())).removeListener(this);
+        System.out.println("waitDestroyed");
         //Objects.requireNonNull(getActivity()).finish();
         //startActivity(getActivity().getIntent());
     }
@@ -154,6 +181,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         Log.d(TAG, "OndataChanged : devices sync");
                         ok1.setText("OK");
                         ok2.setText("...");
+                        btn_sync.setEnabled(false);
                 }
 
                 if (Objects.requireNonNull(item.getUri().getPath()).compareTo(HEART_RATE_COUNT_PATH) == 0) {
@@ -179,6 +207,12 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         timerBeforeDestroy.start();
                     }
                 }
+
+                if (item.getUri().getPath().compareTo(WEAR_QUIT_APP_PATH) == 0) {
+                    Log.d(TAG, "app closed on mobile");
+                    System.out.println("app closed on mobile");
+                    drawInfoBox();
+                }
             }
         }
         if (meas1 != 0 && meas2 != 0 && meas3 != 0) {
@@ -189,6 +223,13 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
             Log.d(TAG, sDate);
             dbHandler.addDate(patientId, sDate);
         }
+    }
+
+    private void drawInfoBox() {
+        Intent mobileAlertInfoIntent = new Intent(getContext(), MobileAlertInfoActivity.class);
+        startActivity(mobileAlertInfoIntent);
+        isProperDestroy = true;
+        destroyFragment();
     }
 
     @Override
@@ -207,6 +248,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         // send cancel signal
                         stopTestTask.execute(1);
                         //Objects.requireNonNull(getActivity()).finish();
+                        isProperDestroy = true;
                         destroyFragment();
                     }
                 })

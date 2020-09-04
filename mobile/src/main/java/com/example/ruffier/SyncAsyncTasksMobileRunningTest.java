@@ -11,6 +11,8 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.Date;
 
+import static com.example.common.Constants.QUIT_APP;
+import static com.example.common.Constants.MOBILE_QUIT_APP_PATH;
 import static com.example.common.Constants.START_MEASURE;
 import static com.example.common.Constants.START_MEASURE_PATH;
 import static com.example.common.Constants.STOP_MEASURE;
@@ -31,17 +33,22 @@ public class SyncAsyncTasksMobileRunningTest extends AsyncTask<Integer, Integer,
 
         PutDataMapRequest startDataMapRequest = PutDataMapRequest.create(START_MEASURE_PATH);
         PutDataMapRequest stopDataMapRequest = PutDataMapRequest.create(STOP_MEASURE_PATH);
+        PutDataMapRequest quitDataMapRequest = PutDataMapRequest.create(MOBILE_QUIT_APP_PATH);
 
         PutDataRequest putDataRequest;
 
         if (flags == 0) {
-            startDataMapRequest.getDataMap().putInt(START_MEASURE, flags);
+            //startDataMapRequest.getDataMap().putInt(START_MEASURE, flags);
             startDataMapRequest.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
             putDataRequest = startDataMapRequest.asPutDataRequest();
-        } else {
-            stopDataMapRequest.getDataMap().putInt(STOP_MEASURE, flags);
+        } else if (flags == 1) {
+            //stopDataMapRequest.getDataMap().putInt(STOP_MEASURE, flags);
             stopDataMapRequest.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
             putDataRequest = stopDataMapRequest.asPutDataRequest();
+        } else {
+            //quitDataMapRequest.getDataMap().putInt(QUIT_APP, flags);
+            quitDataMapRequest.getDataMap().putLong("time", new Date().getTime()); // forces the onDataChanged to be caught
+            putDataRequest = quitDataMapRequest.asPutDataRequest();
         }
         putDataRequest.setUrgent();
 

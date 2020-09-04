@@ -47,19 +47,25 @@ public class WearHeartRateService extends Service implements SensorEventListener
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        // call to updatemesurelist a intervalle regulier (timer)
-        if (measureNb == 1)
-            stepRate = 65;
-        if (measureNb == 2)
-            stepRate = 90;
-        if (measureNb == 3)
-            stepRate = 75;
-        heartEmulator.start();
+
+        // supress to remove emulator values
+        //------------------------
+            if (measureNb == 1)
+                stepRate = 65;
+            if (measureNb == 2)
+                stepRate = 90;
+            if (measureNb == 3)
+                stepRate = 75;
+            heartEmulator.start();
+        //-------------------------
+
         return super.onStartCommand(intent, flags, startId);
     }
 
     int stepRate;
 
+    // used to emulate heart rate (use to debug)
+    //-------------------------------------------
     CountDownTimer heartEmulator = new CountDownTimer(10000, 9000) {
         @Override
         public void onTick(long l) {
@@ -72,6 +78,7 @@ public class WearHeartRateService extends Service implements SensorEventListener
 
         }
     };
+    //-------------------------------------------
 
     @Nullable
     @Override

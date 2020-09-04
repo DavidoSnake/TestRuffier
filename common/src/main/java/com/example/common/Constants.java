@@ -18,6 +18,8 @@ public class Constants {
     public static final String REDIRECT_WEAR_PATH = "/redirect_wear";
     public static final String DEVICES_SYNC_PATH = "/sync";
     public static final String STOP_MEASURE_PATH = "/stop";
+    public static final String MOBILE_QUIT_APP_PATH = "/mobile_quit";
+    public static final String WEAR_QUIT_APP_PATH = "/wear_quit";
 
     // measures
     public static final String DEVICES_SYNC = "com.example.common.DEVICES_SYNC";
@@ -25,6 +27,7 @@ public class Constants {
     public static final String HEART_MEASURE_2 = "com.example.common.HEART_MEASURE_2";
     public static final String HEART_MEASURE_3 = "com.example.common.HEART_MEASURE_3";
     public static final String STOP_MEASURE = "com.example.common.STOP_MEASURE";
+    public static final String QUIT_APP = "com.example.common.QUIT_APP";
 
     // duration of all heartrate measures (in milisec)
     public static final int MEASURE_DURATION = 10 * 1000;

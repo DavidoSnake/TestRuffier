@@ -50,8 +50,6 @@ public class ViewPatientActivity extends AppCompatActivity {
     private String TAG = "ViewPatientActivity";
     private boolean doNeedRefresh = true;
 
-    //todo: test if data refresh is needed
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
