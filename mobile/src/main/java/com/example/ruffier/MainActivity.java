@@ -1,6 +1,5 @@
 package com.example.ruffier;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,12 +24,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.common.Patient;
 import com.example.common.SQLiteDBHandler;
 import com.example.testruffier.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FrameLayout noEntry;
     Button emptyBtn;
 
-
     // results list
     List<Patient> array = new ArrayList<>();
     ArrayAdapter<Patient> adapter;
@@ -56,13 +57,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SQLiteDBHandler dbHandler;
     Patient p;
 
+    // ad view
+    AdView ad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // initialize banner ad and load it
+        // ---------------------------------------
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        ad = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        ad.loadAd(adRequest);
+        // ---------------------------------------
+
         Toolbar tb = findViewById(R.id.main_toolbar);
         setSupportActionBar(tb);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Rechercher un profil");
+        }
 
         searchB = findViewById(R.id.searchB);
         fname = findViewById(R.id.fname);
@@ -103,13 +122,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // first use screen
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
-        if(!previouslyStarted) {
+        if (!previouslyStarted) {
             Log.d(TAG, "first app opening");
             SharedPreferences.Editor edit = prefs.edit();
             edit.putBoolean(getString(R.string.pref_previously_started), Boolean.TRUE);
             edit.apply();
             showTuto();
         }
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override

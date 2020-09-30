@@ -65,6 +65,7 @@ public class ViewPatientActivity extends AppCompatActivity {
         Toolbar tb = findViewById(R.id.toolbar2);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Consulter un profil");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -73,6 +74,10 @@ public class ViewPatientActivity extends AppCompatActivity {
         startMeasure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+               /* Intent intent = new Intent(ViewPatientActivity.this, InterstitialAdActivity.class);
+                startActivity(intent);
+                */
+
                 startMeasure.setEnabled(false);
                 waitFragment = new WaitFragment();
 
@@ -209,6 +214,7 @@ public class ViewPatientActivity extends AppCompatActivity {
     }
 
     //todo: prevent activity from restarting (call to onDestroy and onCreate) after an orientation change
+    // solution : never toggle to orientation
 
     @Override
     protected void onResume() {

@@ -20,7 +20,8 @@ public class MoreInfoActivity extends AppCompatActivity {
         // toolbar with back arrow
         Toolbar tb = findViewById(R.id.toolbar_info);
         setSupportActionBar(tb);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Informations");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }

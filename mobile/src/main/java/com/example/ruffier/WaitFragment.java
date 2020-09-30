@@ -55,11 +55,13 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     TextView endTest;
 
     Button btn_cancel;
-    Button btn_sync;
 
     SyncAsyncTasksMobileRunningTest startTestTask;
     SyncAsyncTasksMobileRunningTest stopTestTask;
     SyncAsyncTasksMobileRunningTest mobileQuitTestTask;
+
+    // determines if the devices are synchronized
+    private boolean areDevicesSync = false;
 
     int meas1 = 0;
     int meas2 = 0;
@@ -67,6 +69,9 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     private SQLiteDBHandler dbHandler;
     private int patientId;
     private boolean isProperDestroy = false;
+
+    // sync signal loop
+    private Thread syncThread;
 
     CountDownTimer timerBeforeDestroy = new CountDownTimer(3000, 1000) {
         @Override
@@ -99,23 +104,9 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         btn_cancel = rootView.findViewById(R.id.btn_cancel);
         btn_cancel.setOnClickListener(this);
 
-
-        //todo: temp solution; auto sync tries all ~2-5 sec
-        btn_sync = rootView.findViewById(R.id.btn_sync);
-        btn_sync.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
-                startTestTask.execute(0);
-            }
-        });
-
         mDataClient = Wearable.getDataClient(Objects.requireNonNull(getActivity()));
 
         stopTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
-        startTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
-
-        startTestTask.execute(0);
 
         Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
         dbHandler = new SQLiteDBHandler(getContext());
@@ -137,6 +128,26 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
 
         mobileQuitTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
 
+        // creation of a thread to send sync signal in a loop
+        syncThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!areDevicesSync) {
+                    startTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
+                    startTestTask.execute(0);
+                    System.out.println("sync attempt loop");
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                isProperDestroy = true;
+            }
+
+        });
+        syncThread.start();
+
         return rootView;
     }
 
@@ -152,8 +163,6 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         System.out.println("onPause waitfrag");
         if (!isProperDestroy) {
             System.out.println("not properly destroyed");
-            //todo: bug : messages envoyes en trop (+1 a chaque fois)
-
             mobileQuitTestTask.execute(2);
             destroyFragment();
         }
@@ -181,7 +190,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         Log.d(TAG, "OndataChanged : devices sync");
                         ok1.setText("OK");
                         ok2.setText("...");
-                        btn_sync.setEnabled(false);
+                        areDevicesSync = true;
                 }
 
                 if (Objects.requireNonNull(item.getUri().getPath()).compareTo(HEART_RATE_COUNT_PATH) == 0) {
@@ -259,6 +268,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     }
 
     private void destroyFragment() {
+        //areDevicesSync = false;
         Button startMeasure = Objects.requireNonNull(getActivity()).findViewById(R.id.startMeasureButton);
         startMeasure.setEnabled(true);
         ((ViewPatientActivity) getActivity()).refreshFields();

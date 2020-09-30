@@ -269,8 +269,6 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
     public void onPause() {
         Log.d(TAG, "onPause");
         if (!testEnded) {
-
-            //todo: confirm dialog into cancel signal to mobile
             Log.d(TAG, "test not ended");
             wearQuitTestTask = new SyncAsyncTaskWearRunningTest(this, 0);
             wearQuitTestTask.execute(1);

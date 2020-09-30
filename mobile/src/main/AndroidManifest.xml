@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name="com.example.ruffier.MobileAlertInfoActivity"></activity>
+
+        <activity android:name="com.example.ruffier.MobileAlertInfoActivity" />
+
         <activity
             android:name="com.example.ruffier.EditPatientActivity"
             android:configChanges="orientation"
@@ -23,19 +25,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.ruffier.AddPatientActivity" /> <!-- preventing landscape orientation to avoid additional data sending (see waitfragment for more details) -->
+        <activity android:name="com.example.ruffier.AddPatientActivity" />
         <activity
             android:name="com.example.ruffier.ViewPatientActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" /> <!-- preventing landscape orientation to avoid additional data sending (see waitfragment for more details) -->
         <activity
             android:name="com.example.ruffier.FirstUseActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1795579585601289~3976696503" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

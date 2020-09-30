@@ -20,14 +20,24 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.common.SQLiteDBHandler;
 import com.example.testruffier.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.Objects;
 
-public class AddPatientActivity extends AppCompatActivity implements View.OnClickListener {
+import static com.example.common.Constants.POST_TEST_AD_TEST;
+
+public class AddPatientActivity extends AppCompatActivity {
 
     EditText fname;
     EditText lname;
     Button addB;
+
+    // ad pops up after this activity has been destroy
+    InterstitialAd ad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,10 +68,20 @@ public class AddPatientActivity extends AppCompatActivity implements View.OnClic
         // back arrow
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Ajouter un profil");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
+
+        ad = new InterstitialAd(this);
+        ad.setAdUnitId(POST_TEST_AD_TEST);
     }
 
     // manages both the button and keyboard actions
@@ -97,9 +117,11 @@ public class AddPatientActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    // loads the ad (might freeze the screen for a second)
     @Override
-    public void onClick(View view) {
-
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        ad.loadAd(new AdRequest.Builder().build());
     }
 
     // back arrow
@@ -113,5 +135,15 @@ public class AddPatientActivity extends AppCompatActivity implements View.OnClic
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.no_item_view, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (ad.isLoaded()) {
+            ad.show();
+        } else {
+            System.out.println("ad not loaded");
+        }
     }
 }

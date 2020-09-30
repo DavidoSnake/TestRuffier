@@ -47,4 +47,6 @@ public class Constants {
     public static final String REDIRECT_MOBILE = "com.example.common.REDIRECT_MOBILE";
     public static final String REDIRECT_WEAR = "com.example.common.REDIRECT_WEAR";
 
+    public static final String POST_TEST_AD = "ca-app-pub-1795579585601289/1266772680";
+    public static final String POST_TEST_AD_TEST = "ca-app-pub-3940256099942544/1033173712";
 }

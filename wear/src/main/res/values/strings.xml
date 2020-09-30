@@ -9,6 +9,6 @@
     <!--custom-->
     <string name="key_count_value">key_count_value</string>
     <string name="RATE_COUNT_VALUE">42</string>
-    <string name="app_name">TestRuffier</string>
+    <string name="app_name">Test de Ruffier</string>
 
 </resources>

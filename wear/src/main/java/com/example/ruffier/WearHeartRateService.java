@@ -48,7 +48,7 @@ public class WearHeartRateService extends Service implements SensorEventListener
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
-        // supress to remove emulator values
+        // delete or comment to remove emulator values
         //------------------------
             if (measureNb == 1)
                 stepRate = 65;
@@ -64,7 +64,7 @@ public class WearHeartRateService extends Service implements SensorEventListener
 
     int stepRate;
 
-    // used to emulate heart rate (use to debug)
+    // delete or comment to remove heart rate emulation (used to debug)
     //-------------------------------------------
     CountDownTimer heartEmulator = new CountDownTimer(10000, 9000) {
         @Override

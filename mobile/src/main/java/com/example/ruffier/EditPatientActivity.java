@@ -52,6 +52,7 @@ public class EditPatientActivity extends AppCompatActivity {
         Toolbar tb = findViewById(R.id.toolbar_edit);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Editer de profil");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
