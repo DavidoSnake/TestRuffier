@@ -27,7 +27,8 @@ public class MobileAlertInfoActivity extends AppCompatActivity implements View.O
         // toolbar with back arrow
         Toolbar tb = findViewById(R.id.info_box_toolbar);
         setSupportActionBar(tb);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Erreur de synchronisation");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }

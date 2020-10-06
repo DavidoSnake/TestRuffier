@@ -192,7 +192,7 @@ public class ViewPatientActivity extends AppCompatActivity {
                         }
                     })
                     .setNegativeButton("Non", null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIcon(R.drawable.outline_warning_24)
                     .show();
             // sqlDb.deletePatient(patientId);
         } else if (item.getItemId() == R.id.edit) {

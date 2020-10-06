@@ -21,6 +21,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.common.SQLiteDBHandler;
 import com.example.testruffier.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -39,7 +44,9 @@ import static com.example.common.Constants.HEART_MEASURE_1;
 import static com.example.common.Constants.HEART_MEASURE_2;
 import static com.example.common.Constants.HEART_MEASURE_3;
 import static com.example.common.Constants.HEART_RATE_COUNT_PATH;
+import static com.example.common.Constants.POST_TEST_AD_TEST;
 import static com.example.common.Constants.WEAR_QUIT_APP_PATH;
+import static com.example.common.Constants.isWaitFragmentRunning;
 
 public class WaitFragment extends androidx.fragment.app.Fragment implements DataClient.OnDataChangedListener, View.OnClickListener {
 
@@ -68,10 +75,13 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     int meas3 = 0;
     private SQLiteDBHandler dbHandler;
     private int patientId;
-    private boolean isProperDestroy = false;
+    private boolean isProperDestruction;
 
     // sync signal loop
     private Thread syncThread;
+
+    // ad pops up after this activity has been destroy
+    InterstitialAd ad;
 
     CountDownTimer timerBeforeDestroy = new CountDownTimer(3000, 1000) {
         @Override
@@ -82,7 +92,8 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         @Override
         public void onFinish() {
             // destroys this fragment
-            isProperDestroy = true;
+            isProperDestruction = true;
+            System.out.println("properdestruction");
             destroyFragment();
         }
     };
@@ -128,11 +139,23 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
 
         mobileQuitTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
 
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
+
+        ad = new InterstitialAd(getContext());
+        ad.setAdUnitId(POST_TEST_AD_TEST);
+
         // creation of a thread to send sync signal in a loop
         syncThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!areDevicesSync) {
+                    if (!isWaitFragmentRunning) {
+                        break;
+                    }
                     startTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
                     startTestTask.execute(0);
                     System.out.println("sync attempt loop");
@@ -142,11 +165,11 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         e.printStackTrace();
                     }
                 }
-                isProperDestroy = true;
             }
-
         });
         syncThread.start();
+
+        isWaitFragmentRunning = true;
 
         return rootView;
     }
@@ -155,13 +178,18 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     public void onResume() {
         super.onResume();
         System.out.println("onresume waitfrag");
+        // (re)sets the proper fragment destruction to false
+        isProperDestruction = false;
+        System.out.println("NOT properdestruction");
+        isWaitFragmentRunning = true;
     }
 
     @Override
     public void onPause() {
         super.onPause();
         System.out.println("onPause waitfrag");
-        if (!isProperDestroy) {
+        isWaitFragmentRunning = false;
+        if (!isProperDestruction) {
             System.out.println("not properly destroyed");
             mobileQuitTestTask.execute(2);
             destroyFragment();
@@ -218,8 +246,8 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                 }
 
                 if (item.getUri().getPath().compareTo(WEAR_QUIT_APP_PATH) == 0) {
-                    Log.d(TAG, "app closed on mobile");
-                    System.out.println("app closed on mobile");
+                    Log.d(TAG, "app closed on wear");
+                    System.out.println("app closed on wear");
                     drawInfoBox();
                 }
             }
@@ -237,7 +265,6 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     private void drawInfoBox() {
         Intent mobileAlertInfoIntent = new Intent(getContext(), MobileAlertInfoActivity.class);
         startActivity(mobileAlertInfoIntent);
-        isProperDestroy = true;
         destroyFragment();
     }
 
@@ -257,18 +284,18 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         // send cancel signal
                         stopTestTask.execute(1);
                         //Objects.requireNonNull(getActivity()).finish();
-                        isProperDestroy = true;
+                        isProperDestruction = true;
+                        System.out.println("properdestruction");
                         destroyFragment();
                     }
                 })
                 .setNegativeButton("Non", null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.outline_warning_24)
                 .show();
         // sqlDb.deletePatient(patientId);
     }
 
     private void destroyFragment() {
-        //areDevicesSync = false;
         Button startMeasure = Objects.requireNonNull(getActivity()).findViewById(R.id.startMeasureButton);
         startMeasure.setEnabled(true);
         ((ViewPatientActivity) getActivity()).refreshFields();
@@ -276,7 +303,23 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         assert fragmentManager != null;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.remove(WaitFragment.this).commit();
+
+
+
+        // shows the ad
+        if (isProperDestruction) {
+            if (ad.isLoaded()) {
+                ad.show();
+            } else {
+                Log.d(TAG, "ad not shown : was not loaded");
+            }
+        }
     }
 
-
+    // loads the ad (might freeze the screen for a second)
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ad.loadAd(new AdRequest.Builder().build());
+    }
 }

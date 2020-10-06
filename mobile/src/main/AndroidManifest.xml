@@ -14,10 +14,14 @@
 
         <activity
             android:name="com.example.ruffier.EditPatientActivity"
-            android:configChanges="orientation"
+            android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name="com.example.ruffier.MoreInfoActivity" />
-        <activity android:name="com.example.ruffier.MainActivity">
+        <activity android:name="com.example.ruffier.MoreInfoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.example.ruffier.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
                 <action android:name="android.intent.action.MAIN" />
@@ -25,14 +29,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.ruffier.AddPatientActivity" />
+        <activity android:name="com.example.ruffier.AddPatientActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.example.ruffier.ViewPatientActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" /> <!-- preventing landscape orientation to avoid additional data sending (see waitfragment for more details) -->
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.example.ruffier.FirstUseActivity"
-            android:configChanges="orientation"
+            android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

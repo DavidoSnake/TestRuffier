@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/edit_confirm"
-        android:icon="@android:drawable/checkbox_on_background"
+        android:icon="@drawable/outline_done_24"
         android:title="Confirmer"
         app:showAsAction="ifRoom" />
 </menu>

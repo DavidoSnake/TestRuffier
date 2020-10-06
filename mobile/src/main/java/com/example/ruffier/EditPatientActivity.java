@@ -52,7 +52,7 @@ public class EditPatientActivity extends AppCompatActivity {
         Toolbar tb = findViewById(R.id.toolbar_edit);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Editer de profil");
+            getSupportActionBar().setTitle("Editer le profil");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -108,7 +108,7 @@ public class EditPatientActivity extends AppCompatActivity {
                             }
                         })
                         .setNegativeButton("Non", null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(R.drawable.outline_warning_24)
                         .show();
             }
 

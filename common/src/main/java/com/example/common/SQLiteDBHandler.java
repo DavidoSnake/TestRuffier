@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import org.xml.sax.Parser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
     Context mContext;
     final String TAG = "SQLiteDBHandler";
 
-    private static final int DATABASE_VERSION = 25;
+    private static final int DATABASE_VERSION = 26;
     public static final String DATABASE_NAME = "patients_database";
 
     // patients
@@ -128,10 +130,17 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
         return res;
     }
 
-    public List<Patient> getPatientsByFirstname(String firstname) {
+    public List<Patient> getPatientsByFirstname(String firstname, boolean isStartOfText) {
         // create a list of patients with the same name
         List<Patient> patientList = new ArrayList<>();
-        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_FIRSTNAME + " LIKE \"" + firstname + "%\";";
+        String query;
+
+        if (isStartOfText) {
+            query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_FIRSTNAME + " LIKE \"" + firstname + "%\";";
+        } else {
+            query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_FIRSTNAME + " LIKE \"%" + firstname + "%\" ORDER BY "
+                    + PATIENT_COLUMN_FIRSTNAME + ";";
+        }
 
         SQLiteDatabase sqlDB = this.getReadableDatabase();
         Cursor cursor = sqlDB.rawQuery(query, null);
@@ -176,10 +185,18 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
         return patientList;
     }
 
-    public List<Patient> getPatientsByLastname(String lastname) {
+    public List<Patient> getPatientsByLastname(String lastname, boolean isStartOfText) {
         // create a list of patients with the same name
         List<Patient> patientList = new ArrayList<>();
-        String query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_LASTNAME + " LIKE \"" + lastname + "%\";";
+        String query;
+
+        if (isStartOfText) {
+            query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_LASTNAME + " LIKE \"" + lastname + "%\";";
+        } else {
+            query = "SELECT * FROM " + PATIENT_TABLE_NAME + " WHERE " + PATIENT_COLUMN_LASTNAME + " LIKE \"%" + lastname + "%\" ORDER BY "
+                    + PATIENT_COLUMN_LASTNAME + ";";
+
+        }
 
         SQLiteDatabase sqlDB = this.getReadableDatabase();
         Cursor cursor = sqlDB.rawQuery(query, null);
@@ -329,14 +346,14 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
-
     // return true if the patient already exists
+
     public boolean isAlreadyRecorded(Patient patient) {
         Patient res = getPatient(patient.getFirstname(), patient.getLastname());
         return res.getId() == 0;
     }
-
     // return true if the patient already exists
+
     public boolean isAlreadyRecorded(String firstname, String lastname) {
         Patient res = getPatient(firstname, lastname);
         return res.getId() != 0;
@@ -363,8 +380,8 @@ public class SQLiteDBHandler extends SQLiteOpenHelper {
         Log.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
     }
-
     // edit all fields
+
     public void editPatient(int id, String lastName, String firstName, String m1, String m2, String m3) {
         int nb1 = Integer.parseInt(m1);
         int nb2 = Integer.parseInt(m2);

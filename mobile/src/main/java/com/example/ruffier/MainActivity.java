@@ -209,10 +209,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * search firstly by first name and last name secondly, giving priority to the start of the words
+     * ex : "bo" :
+     * 1 -> bob arale
+     * 2 -> harry bodard
+     * 3 -> carbot theo
+     * 4 -> olivier robot
+     */
     public void performAction() {
         array.clear();
         boolean resultFound = false;
 
+        /////////////////////////// TWO-FIELDS RESEARCH ////////////////////////////////////////////
         // if both fields are filled
         if (!fname.getText().toString().equals("") && !lname.getText().toString().equals("")) {
             Patient p = dbHandler.getPatient(fname.getText().toString(), lname.getText().toString());
@@ -224,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (lname.getText().toString().equals("") && !fname.getText().toString().equals("")) {
 
             // if firstname only is filled
-            List<Patient> listPatients = dbHandler.getPatientsByFirstname(fname.getText().toString());
+            List<Patient> listPatients = dbHandler.getPatientsByFirstname(fname.getText().toString(), true);
             if (listPatients.size() != 0) {
                 resultFound = true;
                 array.addAll(listPatients);
@@ -233,13 +242,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (fname.getText().toString().equals("") && !lname.getText().toString().equals("")) {
 
             // if lastname only is filled
-            List<Patient> listPatients = dbHandler.getPatientsByLastname(lname.getText().toString());
+            List<Patient> listPatients = dbHandler.getPatientsByLastname(lname.getText().toString(), true);
             if (listPatients.size() != 0) {
                 resultFound = true;
                 array.addAll(listPatients);
                 adapter.notifyDataSetChanged();
             }
-        } else {
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////// ONE-FIELD EXPERIMENT /////////////////////////////////////////
+        //todo: fix this (or not)
+        /*String[] parts = fname.getText().toString().split(" ");
+
+        if (parts.length != 0) {
+
+            for (String part : parts) {
+                // only 2 parts max are allowed (first- and lastname), others are ignored
+                if (dbHandler.getPatientsByFirstname(part, true).isEmpty()) {
+                    if (dbHandler.getPatientsByLastname(part, true).isEmpty()) {
+                        // first part of the text does not match the start of first- or lastname
+
+                        if (dbHandler.getPatientsByFirstname(part, false).isEmpty()) {
+                            if (dbHandler.getPatientsByLastname(part, false).isEmpty()) {
+                                // first part corresponds to nothing
+
+                                System.out.println("no match for the substring");
+                            } else {
+                                resultFound = true;
+                                array.addAll(dbHandler.getPatientsByLastname(part, false));
+                                adapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            resultFound = true;
+                            array.addAll(dbHandler.getPatientsByFirstname(part, false));
+                            adapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        resultFound = true;
+                        array.addAll(dbHandler.getPatientsByLastname(part, true));
+                        adapter.notifyDataSetChanged();
+                    }
+                } else {
+                    resultFound = true;
+                    array.addAll(dbHandler.getPatientsByFirstname(part, true));
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }*/
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        else {
             resultFound = true;
             showAll();
             //Toast.makeText(this, "Veuillez remplir les champs", Toast.LENGTH_SHORT).show();
