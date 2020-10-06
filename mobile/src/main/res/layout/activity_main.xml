@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:focusable="auto"
     android:focusableInTouchMode="true"
-    tools:context="com.example.ruffier.MainActivity">
+    tools:context="com.MaJnr.ruffier.MainActivity">
 
     <Button
         android:id="@+id/searchB"

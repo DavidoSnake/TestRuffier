@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.testruffier">
+    package="com.MaJnr.testruffier">
 
     <application
         android:allowBackup="true"
@@ -10,16 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <activity android:name="com.example.ruffier.MobileAlertInfoActivity" />
+        <activity android:name="com.MaJnr.ruffier.MobileAlertInfoActivity" />
 
         <activity
-            android:name="com.example.ruffier.EditPatientActivity"
+            android:name="com.MaJnr.ruffier.EditPatientActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name="com.example.ruffier.MoreInfoActivity"
+        <activity android:name="com.MaJnr.ruffier.MoreInfoActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
-        <activity android:name="com.example.ruffier.MainActivity"
+        <activity android:name="com.MaJnr.ruffier.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -29,15 +29,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.ruffier.AddPatientActivity"
+        <activity android:name="com.MaJnr.ruffier.AddPatientActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.example.ruffier.ViewPatientActivity"
+            android:name="com.MaJnr.ruffier.ViewPatientActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.example.ruffier.FirstUseActivity"
+            android:name="com.MaJnr.ruffier.FirstUseActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <meta-data
