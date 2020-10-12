@@ -52,7 +52,7 @@ public class EditPatientActivity extends AppCompatActivity {
         Toolbar tb = findViewById(R.id.toolbar_edit);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Editer le profil");
+            getSupportActionBar().setTitle(R.string.menu_edit);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -91,13 +91,13 @@ public class EditPatientActivity extends AppCompatActivity {
             m2Text = m2.getText().toString();
             m3Text = m3.getText().toString();
             if (lnameText.equals("") || fnameText.equals("") || m1Text.equals("") || m2Text.equals("") || m3Text.equals("")) {
-                Toast.makeText(this, "Veuillez remplir les champs", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.toast_fill_fields, Toast.LENGTH_SHORT).show();
                 hideSoftKeyBoard();
             } else {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("Modification")
-                        .setMessage("Modifier définitivement cette entrée ?")
-                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                alert.setTitle(R.string.modify)
+                        .setMessage(R.string.modify_alert)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // sqLiteDBHandler.deletePatient(patientId);
@@ -107,7 +107,7 @@ public class EditPatientActivity extends AppCompatActivity {
                                 performConfirm();
                             }
                         })
-                        .setNegativeButton("Non", null)
+                        .setNegativeButton(R.string.no, null)
                         .setIcon(R.drawable.outline_warning_24)
                         .show();
             }
@@ -126,7 +126,7 @@ public class EditPatientActivity extends AppCompatActivity {
         String sDate = sdf.format(cal.getTime());
         Log.d(TAG, sDate);
         sqLiteDBHandler.addDate(patientId, sDate);
-        Toast.makeText(this, "Données modifiées !", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.toast_data_modified, Toast.LENGTH_LONG).show();
         hideSoftKeyBoard();
         finish();
     }

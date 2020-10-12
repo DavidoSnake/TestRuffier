@@ -30,8 +30,8 @@ public class WearHeartRateService extends Service implements SensorEventListener
 
     public final String TAG = "WearHeartRateService";
     private SensorManager sensorManager;
-    private Sensor heartRateSensor;
     private int heartRate = 0;
+    Sensor heartRateSensor;
     int res = 0;
 
 
@@ -45,6 +45,7 @@ public class WearHeartRateService extends Service implements SensorEventListener
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand");
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        assert sensorManager != null;
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
 

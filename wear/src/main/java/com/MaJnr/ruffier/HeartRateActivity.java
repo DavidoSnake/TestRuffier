@@ -61,14 +61,13 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
         @Override
         public void onTick(long l) {
             Log.d(TAG, "onTick1");
-            String txt = "" + l / 1000;
+            String txt = "" + l / 1000 + " s";
             description.setText(txt);
         }
 
         @Override
         public void onFinish() {
-            String txt = "Mesure en cours";
-            title.setText(txt);
+            title.setText(R.string.measurement_in_progress);
             description.setText("");
             startService(rateServiceIntent);
             //timer2.start();
@@ -91,15 +90,15 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
             if (measureNb == 1) {
                 isTimerRunning = false;
                 setButtonClickListener(2);
-                done.setText("Continuer");
+                done.setText(R.string.button_continue);
                 done.setVisibility(View.VISIBLE);
-                description.setText("A chaque fois que vous sentirez une vibration, faites une flexion");
+                description.setText(R.string.instruct_vibration);
             } else if (measureNb == 2) {
                 isTimerRunning = false;
-                title.setText("Allongez vous");
+                title.setText(R.string.instruct_lie);
             } else if (measureNb == 3) {
-                title.setText("Test terminé");
-                description.setText("Résultats envoyés sur le téléphone");
+                title.setText(R.string.test_ended);
+                description.setText(R.string.result_sent);
                 new CountDownTimer(10000, 1000) {
                     @Override
                     public void onTick(long l) {
@@ -122,12 +121,13 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
             Log.d(TAG, "onTick3");
             // vibrate
             vibrator.vibrate(100);
-            title.setText("" + l / 1500);
+            String s = "" + l / 1500;
+            title.setText(s);
         }
 
         @Override
         public void onFinish() {
-            title.setText("Allongez vous");
+            title.setText(R.string.instruct_lie);
             timer1.start();
             startService(rateServiceIntent);
         }
@@ -138,9 +138,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
     int mRate = 0;
     Vibrator vibrator;
     private boolean isTimerRunning = false;
-    private SyncAsyncTaskWearRunningTest mSyncAsyncTaskWearRunningTest;
     private boolean testEnded = false;
-    private SyncAsyncTaskWearRunningTest wearQuitTestTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -154,7 +152,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
         mDataClient = Wearable.getDataClient(this);
 
         // send start of test msg
-        mSyncAsyncTaskWearRunningTest = new SyncAsyncTaskWearRunningTest(getApplicationContext(), 0);
+        SyncAsyncTaskWearRunningTest mSyncAsyncTaskWearRunningTest = new SyncAsyncTaskWearRunningTest(getApplicationContext(), 0);
         mSyncAsyncTaskWearRunningTest.execute(0);
 
         heartRateReceiver = new BroadcastReceiver() {
@@ -166,23 +164,23 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
                     case MEASURE_1_MSG:
                         Log.d(TAG, "received msg 1");
                         mRate = intent.getIntExtra(HEART_MEASURE_1, 0);
-                        description.setText("" + mRate + " bpm");
+                        String s1 = "" + mRate + " bpm";
+                        description.setText(s1);
 
-                        //  measuresList1.add(mRate);
                         break;
                     case MEASURE_2_MSG:
                         Log.d(TAG, "received msg 2");
                         mRate = intent.getIntExtra(HEART_MEASURE_2, 0);
-                        title.setText("" + mRate + " bpm");
+                        String s2 = "" + mRate + " bpm";
+                        title.setText(s2);
 
-                        // measuresList2.add(mRate);
                         break;
                     case MEASURE_3_MSG:
                         Log.d(TAG, "received msg 3");
                         mRate = intent.getIntExtra(HEART_MEASURE_3, 0);
-                        description.setText("" + mRate + " bpm");
+                        String s3 = "" + mRate + " bpm";
+                        description.setText(s3);
 
-                        // measuresList3.add(mRate);
                         break;
                     default:
                         Log.e(TAG, "heart rate receiver error");
@@ -217,7 +215,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
                 public void onClick(View view) {
                     Log.d(TAG, "onClick");
                     done.setVisibility(View.GONE);
-                    title.setText("Début de la mesure dans :");
+                    title.setText(R.string.start_of_measure_in);
                     timer1.start();
                 }
             });
@@ -232,7 +230,8 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
                         @Override
                         public void onTick(long l) {
                             Log.d(TAG, "beforeFlex");
-                            title.setText("Début dans " + l / 1000);
+                            String s = getString(R.string.start_in) + " " + l / 1000;
+                            title.setText(s);
                         }
 
                         @Override
@@ -270,7 +269,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
         Log.d(TAG, "onPause");
         if (!testEnded) {
             Log.d(TAG, "test not ended");
-            wearQuitTestTask = new SyncAsyncTaskWearRunningTest(this, 0);
+            SyncAsyncTaskWearRunningTest wearQuitTestTask = new SyncAsyncTaskWearRunningTest(this, 0);
             wearQuitTestTask.execute(1);
             finish();
         }

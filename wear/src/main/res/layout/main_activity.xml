@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="85dp"
         android:layout_marginEnd="85dp"
-        android:text="En attente du téléphone"
+        android:text="@string/waiting_for_mobile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

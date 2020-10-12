@@ -21,7 +21,7 @@ public class MoreInfoActivity extends AppCompatActivity {
         Toolbar tb = findViewById(R.id.toolbar_info);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Informations");
+            getSupportActionBar().setTitle(R.string.menu_info);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }

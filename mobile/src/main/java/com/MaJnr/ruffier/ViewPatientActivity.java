@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +28,7 @@ import com.MaJnr.testruffier.R;
 
 public class ViewPatientActivity extends AppCompatActivity {
 
-    TextView pat_fname;
+    TextView pat_name;
     TextView dateTest;
     TextView show_m1;
     TextView show_m2;
@@ -42,10 +43,8 @@ public class ViewPatientActivity extends AppCompatActivity {
     // start the measure on wear
     Button startMeasure;
 
-    // proceeding fragment
+    // test proceeding fragment
     WaitFragment waitFragment;
-    private TextView color_ir;
-    private TextView color_id;
     private String TAG = "ViewPatientActivity";
     private boolean doNeedRefresh = true;
 
@@ -64,7 +63,7 @@ public class ViewPatientActivity extends AppCompatActivity {
         Toolbar tb = findViewById(R.id.toolbar2);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Consulter un profil");
+            getSupportActionBar().setTitle(R.string.menu_view_profie);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -98,8 +97,9 @@ public class ViewPatientActivity extends AppCompatActivity {
 
         SQLiteDBHandler db = new SQLiteDBHandler(this);
         p = db.getPatientById(patientId);
-        pat_fname = findViewById(R.id.patient_fullname);
-        pat_fname.setText(p.getFirstname() + " " + p.getLastname());
+        pat_name = findViewById(R.id.patient_fullname);
+        String names = p.getFirstname() + "    " + p.getLastname();
+        pat_name.setText(names);
 
         dateTest = findViewById(R.id.dateTest);
         dateTest.setText(p.getDateTest());
@@ -109,68 +109,73 @@ public class ViewPatientActivity extends AppCompatActivity {
         int m3 = p.getMeasure_3();
 
         show_m1 = findViewById(R.id.show_m1);
-        show_m1.setText("" + m1);
+        String sm1 = "" + m1;
+        show_m1.setText(sm1);
 
         show_m2 = findViewById(R.id.show_m2);
-        show_m2.setText("" + m2);
+        String sm2 = "" + m2;
+        show_m2.setText(sm2);
 
         show_m3 = findViewById(R.id.show_m3);
-        show_m3.setText("" + m3);
+        String sm3 = "" + m3;
+        show_m3.setText(sm3);
 
         // calcul of indexes
         index_ir = findViewById(R.id.index_ir);
         index_id = findViewById(R.id.index_id);
 
-        color_ir = findViewById(R.id.color_ir);
-        color_id = findViewById(R.id.color_id);
+        TextView color_ir = findViewById(R.id.color_ir);
+        TextView color_id = findViewById(R.id.color_id);
 
         if (m1 != 0 && m2 != 0 && m3 != 0) {
             double ir = (m1 + m2 + m3 - 200) / 10.;
             double roundIr = Math.floor(ir * 10) / 10;
             double id = ((m2 - 70) + 2 * (m3 - m1)) / 10.;
             double roundId = Math.floor(id * 10) / 10;
-            index_ir.setText("" + roundIr);
-            index_id.setText("" + roundId);
+            String sIr = "" + roundIr;
+            index_ir.setText(sIr);
+            String sId = "" + roundId;
+            index_id.setText(sId);
 
             // colors
             if (ir <= 0) {
                 color_ir.setBackgroundColor(Color.argb(100, 0, 255, 0));
-                color_ir.setText("très bon");
+                color_ir.setText(R.string.result_really_good);
             } else if (ir <= 5) {
                 color_ir.setBackgroundColor(Color.argb(100, 128, 255, 0));
-                color_ir.setText("bon");
+                color_ir.setText(R.string.result_good);
             } else if (ir <= 10) {
                 color_ir.setBackgroundColor(Color.argb(100, 255, 255, 0));
-                color_ir.setText("moyen");
+                color_ir.setText(R.string.result_medium);
             } else if (ir <= 15) {
                 color_ir.setBackgroundColor(Color.argb(100, 255, 128, 0));
-                color_ir.setText("insuffisant");
+                color_ir.setText(R.string.result_insufficient);
             } else if (ir > 15) {
                 color_ir.setBackgroundColor(Color.argb(100, 255, 0, 0));
-                color_ir.setText("mauvais");
+                color_ir.setText(R.string.result_bad);
             }
 
             if (id <= 0) {
                 color_id.setBackgroundColor(Color.argb(100, 0, 255, 0));
-                color_id.setText("exellent");
+                color_id.setText(R.string.result_exellent);
             } else if (id <= 2) {
                 color_id.setBackgroundColor(Color.argb(100, 64, 255, 0));
-                color_id.setText("très bon");
+                color_id.setText(R.string.result_really_good);
             } else if (id <= 4) {
                 color_id.setBackgroundColor(Color.argb(100, 128, 255, 0));
-                color_id.setText("bon");
+                color_id.setText(R.string.result_good);
             } else if (id <= 6) {
                 color_id.setBackgroundColor(Color.argb(100, 255, 255, 0));
-                color_id.setText("moyen");
+                color_id.setText(R.string.result_medium);
             } else if (id <= 8) {
                 color_id.setBackgroundColor(Color.argb(100, 255, 194, 0));
-                color_id.setText("faible");
+                color_id.setText(R.string.result_weak);
             } else if (id <= 10) {
                 color_id.setBackgroundColor(Color.argb(100, 255, 64, 0));
-                color_id.setText("très faible");
+                color_id.setText(R.string.result_really_weak);
             } else if (id > 10) {
                 color_id.setBackgroundColor(Color.argb(100, 204, 0, 0));
-                color_id.setText("mauvais");
+                color_id.setText(R.string.result_bad);
             }
         }
     }
@@ -180,17 +185,18 @@ public class ViewPatientActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete) {
             AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-            alert.setTitle("Suppression")
-                    .setMessage("Supprimer définitivement cette entrée ?")
-                    .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            alert.setTitle(R.string.suppression)
+                    .setMessage(R.string.suppression_alert)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             sqlDb.deletePatient(patientId);
                             Log.d(TAG, "patient deleted");
+                            Toast.makeText(ViewPatientActivity.this, R.string.toast_profile_deleted, Toast.LENGTH_LONG).show();
                             finish();
                         }
                     })
-                    .setNegativeButton("Non", null)
+                    .setNegativeButton(R.string.no, null)
                     .setIcon(R.drawable.outline_warning_24)
                     .show();
             // sqlDb.deletePatient(patientId);
@@ -211,9 +217,6 @@ public class ViewPatientActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.patient_view, menu);
         return true;
     }
-
-    //todo: prevent activity from restarting (call to onDestroy and onCreate) after an orientation change
-    // solution : never toggle to orientation
 
     @Override
     protected void onResume() {

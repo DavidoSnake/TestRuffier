@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.MaJnr.common.Patient;
 import com.MaJnr.common.SQLiteDBHandler;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText lname;
     FrameLayout noEntry;
     Button emptyBtn;
+    ConstraintLayout constraintLayout;
 
     // results list
     List<Patient> array = new ArrayList<>();
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar tb = findViewById(R.id.main_toolbar);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Rechercher un profil");
+            getSupportActionBar().setTitle(R.string.menu_search_profile);
         }
 
         searchB = findViewById(R.id.searchB);
@@ -89,10 +91,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         noEntry = findViewById(R.id.noEntry);
         emptyBtn = new Button(this);
 
-        emptyBtn.setText("Ajouter un nouveau patient");
+        emptyBtn.setText(R.string.button_add_new_profile);
         emptyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("click");
                 Intent intent = new Intent(MainActivity.this, AddPatientActivity.class);
                 startActivity(intent);
             }
@@ -131,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        constraintLayout = findViewById(R.id.constraintL);
     }
 
     @Override
@@ -209,14 +213,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /**
-     * search firstly by first name and last name secondly, giving priority to the start of the words
-     * ex : "bo" :
-     * 1 -> bob arale
-     * 2 -> harry bodard
-     * 3 -> carbot theo
-     * 4 -> olivier robot
-     */
     public void performAction() {
         array.clear();
         boolean resultFound = false;
@@ -252,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////// ONE-FIELD EXPERIMENT /////////////////////////////////////////
-        //todo: fix this (or not)
+        //todo: fix this in v2
         /*String[] parts = fname.getText().toString().split(" ");
 
         if (parts.length != 0) {
@@ -298,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Toast.makeText(this, "Veuillez remplir les champs", Toast.LENGTH_SHORT).show();
         }
         if (!resultFound) {
-            Toast.makeText(this, "Aucun résultat trouvé", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_no_result_found, Toast.LENGTH_SHORT).show();
         }
         hideSoftKeyBoard();
     }

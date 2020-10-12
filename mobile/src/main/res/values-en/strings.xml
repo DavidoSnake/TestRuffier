@@ -1,77 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Ruffier Test</string>
-    <string name="pref_previously_started" translatable="false">false</string>
 
     <string name="welcome">
-        Bienvenue sur l\'application de test de Ruffier !
+        Welcome to the Ruffier test application !
     </string>
 
     <string name="description_page_1">
-        Cette application a été créee dans le but d\'assister la réalisation d\'un test de Ruffier pour évaluer la condition physique d\'une personne.\n\n
-        Elle est destinée à fonctionner en parallèle de l\'applicationde Test de Ruffier pour montre connectée, afin de mesurer votre fréquence cardiaque.
+        This application was created in order to assist the realization of a Ruffier test to evaluate the physical condition of a person.\n\n
+        It is intended to work in parallel with the Ruffier test app for connected watches, in order to measure your heart rate.
     </string>
 
     <string name="description_page_2">
-        Pour utiliser cette application avec votre montre connectée, celle-ci doit respecter certains critères :\n\n
+        To use this application with your connected watch, it must meet certain criteria:\n\n
         <b>
         <ul>
-            <li>Posséder le système d\'explitation Wear OS</li>
+            <li>Possess Google\'s Wear OS</li>
         </ul>\n\n
         <ul>
-            <li>Posséder un capteur cardiaque fonctionnel</li>
+            <li>Have a working heart sensor</li>
         </ul>\n\n
         </b>
-        Sans ces caractéristiques, cette application ne pourra pas être utilisée correctement.\n\n
-        Vous pourrez néanmoins utiliser cette application en entrant des valeurs
-        prise avec un outil médical externe.
+        Without these features, this application cannot be used properly.\n\n
+        You can nevertheless use this application by entering values
+        taken with an external medical tool.
     </string>
 
     <string name="description_page_3">
-        Cette application va vous guider durant tout le processus de mesure en vous donnant les instructions nésessaires à son bon fonctionnement \n\n
-        Une fois le protocole terminé, un indice de Ruffier et un indice de Ruffier-Dickson vous seront renseigné.\n\n
+        This application will guide you throughout the measurement process by giving you the necessary instructions for its correct operation. \n\n
+        Once the protocol is complete, you will be informed of a Ruffier index and a Ruffier-Dickson index.\n\n
     </string>
 
     <string name="protocol">
-        <b>Description du protocole :</b>\n\n
-        Le test de Ruffier ou test de Ruffier-Dickson est un test physique qui permet d\'évaluer l\'aptitude d\'une personne à la pratique sportive.
-        Ce test peut être, par exemple, pratiqué sous le contrôle d\'un médecin afin d\'obtenir un certificat médical de non contre-indication à une pratique sportive.\n\n
-        <b>Déroulement du test\n\n</b>
-        Le test se déroule en 3 étapes :
+        <b>Protocol description:</b>\n\n
+        The Ruffier test or Ruffier-Dickson test is a physical test that assesses a person\'s ability to participate in sports.
+        This test can be, for example, performed under the supervision of a doctor in order to obtain a medical certificate of no contraindication to a sport.\n\n
+        <b>Test procedure:\n\n</b>
+        The test takes place in 3 steps:
     </string>
 
     <string name="steps">
-            1. Après un repos (couché) de quelques minutes, une prise de pouls du sujet donne la valeur <i>p0</i>\n\n
+            1. After resting (lying down) for a few minutes, taking the subject\'s pulse gives the value <i>p0</i>\n\n
 
-            2. Le sujet doit ensuite se lever et effectuer 30 flexions complètes de jambes en 45 secondes, bras tendus devant lui.
-            Suite à cette période d\'effort, le pouls <i>p1</i>est pris immédiatement\n\n
+            2. The subject must then stand up and perform 30 complete squats in 45 seconds, arms extended in front of them.
+            Following this period of effort, the pulse <i>p1</i>is immediately taken\n\n
 
-            3. Le sujet s\'allonge à nouveau, et exactement une minute après la fin des flexions, on relève une dernière fois sa fréquence cardiaque <i>p2</i>
+            3. The subject lies down again, and exactly one minute after the end of the squats, his heart rate is recorded for one last time <i>p2</i>
     </string>
 
     <string name="calculs">
-          <b>Exploitation des résultats :\n\n</b>
-        À partir des mesures obtenues, l\'indice de Ruffier (<i>Ir</i>) ainsi que l\'indice de Ruffier-Dickson (<i>Id</i>) sont calculés :\n\n
-        Ir = (<i>p0</i> + <i>p1</i> + <i>p2</i> - 200) / 10;\n
-        Id = ((<i>p1</i> - 70) + 2 * (<i>p2</i> - <i>p0</i>)) / 10;\n\n
-        <b>Interprétation :</b>
+          <b>Exploitation of results:\n\n</b>
+        From the measurements obtained, the Ruffier index (<i>Ri</i>) as well as the Ruffier-Dickson index (<i>Di</i>) are calculated:\n\n
+        Ri = (<i>p0</i> + <i>p1</i> + <i>p2</i> - 200) / 10;\n
+        Di = ((<i>p1</i> - 70) + 2 * (<i>p2</i> - <i>p0</i>)) / 10;\n\n
+        <b>Interpretation :</b>
     </string>
 
     <string name="meaning">
-         Indice de Ruffier (Ir) :\n
-       - Ir &lt; 0 : très bonne adaptation à l\'effort ;\n
-       - Ir ≥ 0 et &lt; 5 : bonne adaptation à l\'effort ;\n
-       - Ir ≥ 5 et &lt; 10 : adaptation à l\'effort moyenne ;\n
-       - Ir ≥ 10 et &lt; 15 : adaptation à l\'effort insuffisante ;\n
-       - Ir ≥ 15 : mauvaise adaptation à l\'effort, un bilan médical complémentaire s\'avère nécessaire.\n\n
+         Ruffier index (Ri) :\n
+       - Ri &lt; 0: very good adaptation to effort;\n
+       - Ri ≥ 0 et &lt; 5: good adaptation to effort;\n
+       - Ri ≥ 5 et &lt; 10: average adaptation to effort;\n
+       - Ri ≥ 10 et &lt; 15: insufficient adaptation to effort;\n
+       - Ri ≥ 15: poor adaptation to the effort, an additional medical assessment is necessary.\n\n
 
-     Indice de Ruffier-Dickson (Id) :\n
-       - Id &lt; 0 : excellent ;\n
-       - Id ≥ 0 et &lt; 2 : très bon ;\n
-       - Id ≥ 2 et &lt; 4 : bon ;\n
-       - Id ≥ 4 et &lt; 6 : moyen ;\n
-       - Id ≥ 6 et &lt; 8 : faible ;\n
-       - Id ≥ 8 et &lt; 10 : très faible ;\n
-       - Id ≥ 10 : mauvaise adaptation à l\'effort.
+     Ruffier-Dickson index (Di) :\n
+       - Di &lt; 0: excellent;\n
+       - Di ≥ 0 et &lt; 2: really good;\n
+       - Di ≥ 2 et &lt; 4: good;\n
+       - Di ≥ 4 et &lt; 6: average;\n
+       - Di ≥ 6 et &lt; 8: weak;\n
+       - Di ≥ 8 et &lt; 10: really weak;\n
+       - Di ≥ 10: poor adaptation to the effort.
     </string>
+
+    <!--others strings of the app-->
+    <string name="menu_search_profile">Search a profile</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="button_search">search</string>
+    <string name="menu_add_profile">Add a profile</string>
+    <string name="button_add">add</string>
+    <string name="toast_profile_recorded">Profile recorded !</string>
+    <string name="toast_fill_fields">Please fill the fields</string>
+    <string name="toast_profile_already_exixts">This profile already exists</string>
+    <string name="button_add_new_profile">add a profile</string>
+    <string name="menu_info">Informations</string>
+    <string name="menu_view_profie">View a profile</string>
+    <string name="view_patient_measures">BPM measurements:</string>
+    <string name="last_modif">Last modification:</string>
+    <string name="no_test_recorded">No test recorded</string>
+    <string name="ruffier_index">Ruffier index</string>
+    <string name="ruffier_dickson_index">Ruffier-Dickson index</string>
+    <string name="no_data">No data</string>
+    <string name="button_start_test">start test</string>
+    <string name="test_in_process">Test in process</string>
+    <string name="wear_sync">Synchronisation with the wear</string>
+    <string name="waiting">Waiting</string>
+    <string name="cancel">Cancel</string>
+    <string name="cancel_test_alert">Do you want to cancel the test ?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="suppression">Suppression</string>
+    <string name="suppression_alert">Do you want to delete this profile ?</string>
+    <string name="menu_edit">Edit profile</string>
+    <string name="edit_measure1">Measure 1 (BPM resting)</string>
+    <string name="edit_measure2">Measure 2 (BPM after 30 squats)</string>
+    <string name="edit_measure3">Measure 3 (BPM after 1 min of recovery)</string>
+    <string name="modify">Modify</string>
+    <string name="modify_alert">Do you want to apply the modifications on this profile ?</string>
+    <string name="toast_data_modified">Data modified !</string>
+    <string name="toast_no_result_found">No result found</string>
+    <string name="menu_sync_error">Synchronisation error</string>
+    <string name="sync_error_text">Please do not exit the wear application until the test is finished</string>
+    <string name="result_really_good">Really good</string>
+    <string name="result_good">Good</string>
+    <string name="result_medium">Medium</string>
+    <string name="result_insufficient">Insufficient</string>
+    <string name="result_bad">Bad</string>
+    <string name="result_exellent">Excellent</string>
+    <string name="result_weak">Weak</string>
+    <string name="result_really_weak">Really weak</string>
+    <string name="end_of_test">End of test</string>
+    <string name="button_understood">understood</string>
+    <string name="button_begin">begin</string>
+    <string name="button_more_about">more about the test</string>
+    <string name="wait_measure1">Measure 1: Waiting</string>
+    <string name="wait_measure2">Measure 2: Waiting</string>
+    <string name="wait_measure3">Measure 3: Waiting</string>
+    <string name="no_name">No name</string>
+    <string name="toast_profile_deleted">Profile deleted !</string>
+    <string name="measure">Measure</string>
 </resources>

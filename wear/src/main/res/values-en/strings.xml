@@ -1,6 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="isFragmentOpen">false</bool>
-
     <string name="app_name">Ruffier test</string>
     <string name="text_app_closed">Please do not exit the mobile application while the test is processing</string>
     <string name="waiting_for_mobile">Waiting for the mobile</string>
@@ -15,5 +14,4 @@
     <string name="start_of_measure_in">Start of measure in:</string>
     <string name="start_in">Start in</string>
     <string name="measurement_in_progress">Measurement in progress</string>
-
 </resources>

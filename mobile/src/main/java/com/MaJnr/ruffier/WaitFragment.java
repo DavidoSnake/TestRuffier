@@ -77,9 +77,6 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     private int patientId;
     private boolean isProperDestruction;
 
-    // sync signal loop
-    private Thread syncThread;
-
     // ad pops up after this activity has been destroy
     InterstitialAd ad;
 
@@ -149,7 +146,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         ad.setAdUnitId(POST_TEST_AD_TEST);
 
         // creation of a thread to send sync signal in a loop
-        syncThread = new Thread(new Runnable() {
+        Thread syncThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!areDevicesSync) {
@@ -226,21 +223,21 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                     if (dataMap.containsKey(HEART_MEASURE_1)) {
                         Log.d(TAG, "onDataChanged : measure 1");
                         meas1 = dataMap.getInt(HEART_MEASURE_1, 0);
-                        m1.setText("Mesure 1: " + meas1 + " BPM");
+                        m1.setText(getString(R.string.measure) + " 1: " + meas1 + " BPM");
                         ok2.setText("OK");
                         ok3.setText("...");
                     } else if (dataMap.containsKey(HEART_MEASURE_2)) {
                         Log.d(TAG, "onDataChanged : measure 2");
                         meas2 = dataMap.getInt(HEART_MEASURE_2, 0);
-                        m2.setText("Mesure 2: " + meas2 + " BPM");
+                        m2.setText(getString(R.string.measure) + " 2: " + meas2 + " BPM");
                         ok3.setText("OK");
                         ok4.setText("...");
                     } else if (dataMap.containsKey(HEART_MEASURE_3)) {
                         Log.d(TAG, "onDataChanged : measure 3");
                         meas3 = dataMap.getInt(HEART_MEASURE_3, 0);
-                        m3.setText("Mesure 3: " + meas3 + " BPM");
+                        m3.setText(getString(R.string.measure) + " 3: " + meas3 + " BPM");
                         ok4.setText("OK");
-                        endTest.setText("Fin du test");
+                        endTest.setText(R.string.end_of_test);
                         timerBeforeDestroy.start();
                     }
                 }
@@ -275,9 +272,9 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
 
     public void drawAlertBox() {
         AlertDialog.Builder alert = new AlertDialog.Builder(Objects.requireNonNull(this.getContext()));
-        alert.setTitle("Annuler")
-                .setMessage("Annuler le test ?")
-                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+        alert.setTitle(R.string.cancel)
+                .setMessage(R.string.cancel_test_alert)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         System.out.println("action cancelled");
@@ -289,7 +286,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         destroyFragment();
                     }
                 })
-                .setNegativeButton("Non", null)
+                .setNegativeButton(R.string.no, null)
                 .setIcon(R.drawable.outline_warning_24)
                 .show();
         // sqlDb.deletePatient(patientId);

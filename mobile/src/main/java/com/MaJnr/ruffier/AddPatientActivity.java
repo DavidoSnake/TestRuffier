@@ -58,7 +58,7 @@ public class AddPatientActivity extends AppCompatActivity {
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Ajouter un profil");
+            getSupportActionBar().setTitle(R.string.menu_add_profile);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -72,14 +72,14 @@ public class AddPatientActivity extends AppCompatActivity {
         String ltext = lname.getText().toString();
 
         if (ftext.equals("") || ltext.equals("")) {
-            Toast.makeText(this, "Veuillez remplir les champs", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_fill_fields, Toast.LENGTH_SHORT).show();
         } else {
             if (sqLiteDBHandler.isAlreadyRecorded(ftext, ltext)) {
-                Toast.makeText(this, "Ce patient existe déjà", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.toast_profile_already_exixts, Toast.LENGTH_LONG).show();
                 hideSoftKeyBoard();
             } else {
                 sqLiteDBHandler.addPatient(fname.getText().toString(), lname.getText().toString());
-                Toast.makeText(this, "Patient enregistré !", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.toast_profile_recorded, Toast.LENGTH_LONG).show();
                 hideSoftKeyBoard();
                 finish();
             }

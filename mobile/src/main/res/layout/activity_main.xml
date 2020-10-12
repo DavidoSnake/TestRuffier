@@ -17,7 +17,7 @@
         android:layout_marginStart="137dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="137dp"
-        android:text="rechercher"
+        android:text="@string/button_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lname" />
@@ -32,14 +32,15 @@
         android:ems="10"
         android:focusable="auto"
         android:focusableInTouchMode="true"
-        android:hint="Prénom"
+        android:hint="@string/first_name"
         android:inputType="textPersonName"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/main_toolbar"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/lname"
@@ -51,28 +52,15 @@
         android:ems="10"
         android:focusable="auto"
         android:focusableInTouchMode="true"
-        android:hint="Nom"
+        android:hint="@string/last_name"
         android:inputType="textPersonName"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fname" />
-
-    <FrameLayout
-        android:id="@+id/noEntry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list">
-
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/fname"
+        android:importantForAutofill="no" />
 
     <ListView
         android:id="@+id/list"
@@ -118,13 +106,25 @@
     <Space
         android:id="@+id/space2"
         android:layout_width="0dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.2"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/noEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/space2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noEntry"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/list">
+
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

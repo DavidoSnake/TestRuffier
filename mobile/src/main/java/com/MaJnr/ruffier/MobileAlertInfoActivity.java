@@ -28,7 +28,7 @@ public class MobileAlertInfoActivity extends AppCompatActivity implements View.O
         Toolbar tb = findViewById(R.id.info_box_toolbar);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Erreur de synchronisation");
+            getSupportActionBar().setTitle(R.string.menu_sync_error);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }

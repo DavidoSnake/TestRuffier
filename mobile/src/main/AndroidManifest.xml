@@ -10,7 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <activity android:name="com.MaJnr.ruffier.MobileAlertInfoActivity" />
+        <activity android:name="com.MaJnr.ruffier.MobileAlertInfoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.MaJnr.ruffier.EditPatientActivity"

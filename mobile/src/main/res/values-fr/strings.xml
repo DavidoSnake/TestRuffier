@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Test de Ruffier</string>
-    <string name="pref_previously_started" translatable="false">false</string>
 
     <string name="welcome">
         Bienvenue sur l\'application de test de Ruffier !
@@ -16,7 +15,7 @@
         Pour utiliser cette application avec votre montre connectée, celle-ci doit respecter certains critères :\n\n
         <b>
         <ul>
-            <li>Posséder le système d\'explitation Wear OS</li>
+            <li>Posséder le système d\'exploitation Wear OS</li>
         </ul>\n\n
         <ul>
             <li>Posséder un capteur cardiaque fonctionnel</li>
@@ -24,7 +23,7 @@
         </b>
         Sans ces caractéristiques, cette application ne pourra pas être utilisée correctement.\n\n
         Vous pourrez néanmoins utiliser cette application en entrant des valeurs
-        prise avec un outil médical externe.
+        prises avec un outil médical externe.
     </string>
 
     <string name="description_page_3">
@@ -74,4 +73,62 @@
        - Id ≥ 8 et &lt; 10 : très faible ;\n
        - Id ≥ 10 : mauvaise adaptation à l\'effort.
     </string>
+
+    <!--autres strings de l'app-->
+    <string name="menu_search_profile">Rechercher un profil</string>
+    <string name="first_name">Prénom</string>
+    <string name="last_name">Nom</string>
+    <string name="button_search">rechercher</string>
+    <string name="menu_add_profile">Ajouter un profil</string>
+    <string name="button_add">ajouter</string>
+    <string name="toast_profile_recorded">Profil enregistré !</string>
+    <string name="toast_fill_fields">Veuillez remplir les champs</string>
+    <string name="toast_profile_already_exixts">Ce profil existe déjà</string>
+    <string name="button_add_new_profile">ajouter un profil</string>
+    <string name="menu_info">Informations</string>
+    <string name="menu_view_profie">Consulter un profil</string>
+    <string name="view_patient_measures">Mesures (en BPM) :</string>
+    <string name="last_modif">Dernière modification:</string>
+    <string name="no_test_recorded">Aucun test réalisé</string>
+    <string name="ruffier_index">Indice de Ruffier</string>
+    <string name="ruffier_dickson_index">Indice de Ruffier-Dickson</string>
+    <string name="no_data">Pas de données</string>
+    <string name="button_start_test">Commencer le test</string>
+    <string name="test_in_process">Test en cours</string>
+    <string name="wear_sync">Synchronisation avec la montre</string>
+    <string name="waiting">En attente</string>
+    <string name="cancel">Annuler</string>
+    <string name="cancel_test_alert">Voulez vous arrêter le test ?</string>
+    <string name="yes">oui</string>
+    <string name="no">non</string>
+    <string name="suppression">Suppression</string>
+    <string name="suppression_alert">Voulez vous supprimmer ce profil ?</string>
+    <string name="menu_edit">Éditer le profil</string>
+    <string name="edit_measure1">Mesure 1 (BPM au repos)</string>
+    <string name="edit_measure2">Mesure 2 (BPM après 30 flexions)</string>
+    <string name="edit_measure3">Mesure 3 (BPM après 1 min de récupération)</string>
+    <string name="modify">Modification</string>
+    <string name="modify_alert">Voulez vous appliquer les modifications à ce profil ?</string>
+    <string name="toast_data_modified">Données modifiées !</string>
+    <string name="toast_no_result_found">Aucun résultat trouvé</string>
+    <string name="menu_sync_error">Erreur de synchronisation</string>
+    <string name="sync_error_text">Veuillez ne pas fermer l\'application sur montre lorsque le test est en cours</string>
+    <string name="result_really_good">Très bon</string>
+    <string name="result_good">Bon</string>
+    <string name="result_medium">Moyen</string>
+    <string name="result_insufficient">Insuffisant</string>
+    <string name="result_bad">Mauvais</string>
+    <string name="result_exellent">Excellent</string>
+    <string name="result_weak">Faible</string>
+    <string name="result_really_weak">Très faible</string>
+    <string name="end_of_test">Fin du test</string>
+    <string name="button_understood">Compris</string>
+    <string name="button_begin">commencer</string>
+    <string name="button_more_about">En savoir plus sur le test</string>
+    <string name="wait_measure1">Mesure 1: En attente</string>
+    <string name="wait_measure2">Mesure 2: En attente</string>
+    <string name="wait_measure3">Mesure 3: En attente</string>
+    <string name="no_name">Pas de nom</string>
+    <string name="toast_profile_deleted">Profil supprimé !</string>
+    <string name="measure">Mesure</string>
 </resources>

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClick"
-        android:text="En savoir plus sur le test"
+        android:text="@string/button_more_about"
         app:layout_constraintBottom_toBottomOf="@+id/scrollViewP3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -20,10 +20,10 @@
 
     <Button
         android:id="@+id/buttonDone"
-        android:layout_width="72dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="onClick"
-        android:text="Fini"
+        android:text="@string/button_begin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
