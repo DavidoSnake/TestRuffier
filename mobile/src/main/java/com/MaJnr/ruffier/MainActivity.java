@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private final String TAG = "MainActivity";
 
+    // layout entities
     Button searchB;
     EditText fname;
     EditText lname;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button emptyBtn;
     ConstraintLayout constraintLayout;
 
-    // results list
+    // search result list
     List<Patient> array = new ArrayList<>();
     ArrayAdapter<Patient> adapter;
     ListView listView;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         emptyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("click");
+                Log.d(TAG, "click");
                 Intent intent = new Intent(MainActivity.this, AddPatientActivity.class);
                 startActivity(intent);
             }
@@ -113,16 +114,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         searchB.setOnClickListener(this);
 
-        //Database test (sucess)
         dbHandler = new SQLiteDBHandler(this);
-
         adapter = new ArrayAdapter<>(this, R.layout.list_cell, array);
 
         listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
-        // first use screen
+        // first use screen, only shown at the first launch of the app
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
         if (!previouslyStarted) {
@@ -133,7 +132,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             showTuto();
         }
 
+        // adjust the view
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         constraintLayout = findViewById(R.id.constraintL);
     }
 
@@ -143,12 +144,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
     }
 
-    // shows quick start instructions and informations
     public void showTuto() {
         Intent intent = new Intent(this, FirstUseActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Search all recorded patients and add them to the list
+     */
     private void showAll() {
         array.clear();
         List<Patient> listPatients = dbHandler.getAllPatients();
@@ -170,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // handle menu bar items events (add and info)
         if (item.getItemId() == R.id.add) {
             Intent intent = new Intent(this, AddPatientActivity.class);
             startActivity(intent);
@@ -195,24 +199,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        // start the detailed patient fields view
         Intent intent = new Intent(this, ViewPatientActivity.class);
         p = (Patient) adapterView.getItemAtPosition(i);
         intent.putExtra("PATIENT_ID", p.getId());
 
         startActivity(intent);
-        System.out.println(p.getFirstname());
+        Log.d(TAG, p.getFirstname());
     }
 
-    // hide the keyboard
+    /**
+     * Hide the soft keyboard
+     */
     private void hideSoftKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
         assert imm != null;
-        if (imm.isAcceptingText()) { // verify if the soft keyboard is open
+        if (imm.isAcceptingText()) {
+            // verify if the soft keyboard is open
             imm.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
         }
     }
 
+    /**
+     * Handle the search feature with two fields (first and last name), one field search is in WIP
+     */
     public void performAction() {
         array.clear();
         boolean resultFound = false;
@@ -228,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else if (lname.getText().toString().equals("") && !fname.getText().toString().equals("")) {
 
-            // if firstname only is filled
+            // if first name only is filled
             List<Patient> listPatients = dbHandler.getPatientsByFirstname(fname.getText().toString(), true);
             if (listPatients.size() != 0) {
                 resultFound = true;
@@ -237,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else if (fname.getText().toString().equals("") && !lname.getText().toString().equals("")) {
 
-            // if lastname only is filled
+            // if last name only is filled
             List<Patient> listPatients = dbHandler.getPatientsByLastname(lname.getText().toString(), true);
             if (listPatients.size() != 0) {
                 resultFound = true;
@@ -262,8 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (dbHandler.getPatientsByFirstname(part, false).isEmpty()) {
                             if (dbHandler.getPatientsByLastname(part, false).isEmpty()) {
                                 // first part corresponds to nothing
-
-                                System.out.println("no match for the substring");
+                                Log.d(TAG, "no match for the substring");
                             } else {
                                 resultFound = true;
                                 array.addAll(dbHandler.getPatientsByLastname(part, false));
@@ -291,7 +300,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else {
             resultFound = true;
             showAll();
-            //Toast.makeText(this, "Veuillez remplir les champs", Toast.LENGTH_SHORT).show();
         }
         if (!resultFound) {
             Toast.makeText(this, R.string.toast_no_result_found, Toast.LENGTH_SHORT).show();

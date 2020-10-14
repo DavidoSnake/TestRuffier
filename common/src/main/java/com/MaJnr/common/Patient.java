@@ -9,7 +9,7 @@ public class Patient {
     private String firstname;
     private String dateTest;
 
-    // presuming measures are int
+    // measures in integers
     private int measure_1;
     private int measure_2;
     private int measure_3;
@@ -17,17 +17,7 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(int id, String lastname, String firstname, int measure_1, int measure_2, int measure_3, String dateTest) {
-        this.id = id;
-        this.lastname = lastname;
-        this.firstname = firstname;
-        this.measure_1 = measure_1;
-        this.measure_2 = measure_2;
-        this.measure_3 = measure_3;
-        this.dateTest = dateTest;
-    }
-
-    //getters
+    // getters
     public int getId() {
         return id;
     }
@@ -56,7 +46,7 @@ public class Patient {
         return dateTest;
     }
 
-    //setters
+    // setters
     public void setId(int id) {
         this.id = id;
     }
@@ -88,8 +78,6 @@ public class Patient {
     @NonNull
     @Override
     public String toString() {
-       /* return "id: " + id + " nom: " + lastname + " prénom: " + firstname + " mesure 1: " + measure_1
-                + " mesure 2: " + measure_2 + " mesure 3: " + measure_3;*/
        return firstname + " " + lastname;
     }
 }

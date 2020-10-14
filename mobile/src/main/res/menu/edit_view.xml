@@ -5,6 +5,6 @@
     <item
         android:id="@+id/edit_confirm"
         android:icon="@drawable/outline_done_24"
-        android:title="Confirmer"
+        android:title="confirm"
         app:showAsAction="ifRoom" />
 </menu>

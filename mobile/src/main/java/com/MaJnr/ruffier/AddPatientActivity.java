@@ -24,6 +24,7 @@ import java.util.Objects;
 
 public class AddPatientActivity extends AppCompatActivity {
 
+    // fields and button
     EditText fname;
     EditText lname;
     Button addB;
@@ -64,7 +65,9 @@ public class AddPatientActivity extends AppCompatActivity {
         }
     }
 
-    // manages both the button and keyboard actions
+    /**
+     * Manages both the button and keyboard validation action
+     */
     public void performAction() {
         SQLiteDBHandler sqLiteDBHandler = new SQLiteDBHandler(this);
 
@@ -86,20 +89,21 @@ public class AddPatientActivity extends AppCompatActivity {
         }
     }
 
-    // hide the keyboard
+    /**
+     * Hide the soft keyboard
+     */
     private void hideSoftKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
         assert imm != null;
-        if(imm.isAcceptingText()) {
+        if (imm.isAcceptingText()) {
             // verify if the soft keyboard is open
             imm.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
         }
     }
 
-    // back arrow
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // handle the menu's back arrow
         finish();
         return super.onOptionsItemSelected(item);
     }

@@ -29,40 +29,14 @@ public class WearHeartRateService extends Service implements SensorEventListener
     SyncAsyncTaskWearRunningTest mSyncAsyncTaskWearRunningTest = null;
 
     public final String TAG = "WearHeartRateService";
+
+    // sensor
     private SensorManager sensorManager;
-    private int heartRate = 0;
     Sensor heartRateSensor;
+
+    // flags
+    private int heartRate = 0;
     int res = 0;
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.d(TAG, "onCreate");
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand");
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        assert sensorManager != null;
-        heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
-        sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
-
-        // delete or comment to remove emulator values
-        //------------------------
-            if (measureNb == 1)
-                stepRate = 65;
-            if (measureNb == 2)
-                stepRate = 90;
-            if (measureNb == 3)
-                stepRate = 75;
-            heartEmulator.start();
-        //-------------------------
-
-        return super.onStartCommand(intent, flags, startId);
-    }
-
     int stepRate;
 
     // delete or comment to remove heart rate emulation (used to debug)
@@ -80,6 +54,37 @@ public class WearHeartRateService extends Service implements SensorEventListener
         }
     };
     //-------------------------------------------
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d(TAG, "onCreate");
+    }
+
+    /**
+     * Start the sensor and get its data
+     */
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand");
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        assert sensorManager != null;
+        heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
+        sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
+
+        // delete or comment to remove emulator values
+        //------------------------
+            if (measureNb == 1)
+                stepRate = 65;
+            if (measureNb == 2)
+                stepRate = 90;
+            if (measureNb == 3)
+                stepRate = 75;
+            heartEmulator.start();
+        //-------------------------
+
+        return super.onStartCommand(intent, flags, startId);
+    }
 
     @Nullable
     @Override
@@ -102,6 +107,12 @@ public class WearHeartRateService extends Service implements SensorEventListener
         updateMeasuresList();
     }
 
+    /**
+     * In order to have precise data from the sensor, multiples data values are stocked
+     * into a list, and the average of theses values is recorded instead of a single one
+     * that can be imprecise. Also the zero value is not recorded since it is a sensor
+     * problem
+     */
     private void updateMeasuresList() {
         Log.d(TAG, "updateMeasuresList");
 
@@ -118,6 +129,9 @@ public class WearHeartRateService extends Service implements SensorEventListener
         } else Log.d(TAG, "value equals to 0: skipping sending");
     }
 
+    /**
+     * Give the message to be sent different flags depending on the step of the test
+     */
     private void sendHeartRateUpdate() {
         Log.d(TAG, "sendHeartRateUpdate");
         Intent intent = new Intent();
@@ -134,6 +148,10 @@ public class WearHeartRateService extends Service implements SensorEventListener
         sendBroadcast(intent);
     }
 
+
+    /**
+     * The average value of the measures are calculated
+     */
     public void finishService() {
         if (measureNb == 1) {
             // calcul of average rate
@@ -145,7 +163,6 @@ public class WearHeartRateService extends Service implements SensorEventListener
                 res = sum / measuresList1.size();
             }
             Log.d(TAG, "1st average : " + res);
-
         } else {
             if (measureNb == 2) {
                 // calcul of average rate
@@ -157,7 +174,6 @@ public class WearHeartRateService extends Service implements SensorEventListener
                     res = sum / measuresList2.size();
                 }
                 Log.d(TAG, "2nd average : " + res);
-                // result send to asynctask
             } else if (measureNb == 3) {
                 // calcul of average rate
                 int sum = 0;
@@ -181,7 +197,6 @@ public class WearHeartRateService extends Service implements SensorEventListener
         mSyncAsyncTaskWearRunningTest.execute(res);
         measureNb++;
         sensorManager.unregisterListener(this);
-        //super.onDestroy();
     }
 
 

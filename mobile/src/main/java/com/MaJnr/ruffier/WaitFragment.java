@@ -51,36 +51,43 @@ import static com.MaJnr.common.Constants.isWaitFragmentRunning;
 public class WaitFragment extends androidx.fragment.app.Fragment implements DataClient.OnDataChangedListener, View.OnClickListener {
 
     final String TAG = "WaitFragment";
+
+    // view entities
     TextView m1;
     TextView m2;
     TextView m3;
-    DataClient mDataClient;
     TextView ok1;
     TextView ok2;
     TextView ok3;
     TextView ok4;
     TextView endTest;
-
     Button btn_cancel;
 
-    SyncAsyncTasksMobileRunningTest startTestTask;
-    SyncAsyncTasksMobileRunningTest stopTestTask;
-    SyncAsyncTasksMobileRunningTest mobileQuitTestTask;
+    DataClient mDataClient;
 
     // determines if the devices are synchronized
     private boolean areDevicesSync = false;
 
+    // database access
+    private SQLiteDBHandler dbHandler;
+    private int patientId;
+
+    // background task are handling the sending of data to the wear
+    SyncAsyncTasksMobileRunningTest startTestTask;
+    SyncAsyncTasksMobileRunningTest stopTestTask;
+    SyncAsyncTasksMobileRunningTest mobileQuitTestTask;
+
+    // flags
     int meas1 = 0;
     int meas2 = 0;
     int meas3 = 0;
-    private SQLiteDBHandler dbHandler;
-    private int patientId;
     private boolean isProperDestruction;
 
     // ad pops up after this activity has been destroy
     InterstitialAd ad;
 
-    CountDownTimer timerBeforeDestroy = new CountDownTimer(3000, 1000) {
+    // timer that destroy the view after a successful test attempt
+    CountDownTimer timerBeforeViewDestruction = new CountDownTimer(3000, 1000) {
         @Override
         public void onTick(long l) {
             Log.d(TAG, "destruction in " + l / 1000);
@@ -90,7 +97,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         public void onFinish() {
             // destroys this fragment
             isProperDestruction = true;
-            System.out.println("properdestruction");
+            Log.d(TAG, "proper destruction");
             destroyFragment();
         }
     };
@@ -99,6 +106,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
+
         View rootView = inflater.inflate(R.layout.fragment_wait, container, false);
         m1 = rootView.findViewById(R.id.m1);
         m2 = rootView.findViewById(R.id.m2);
@@ -155,7 +163,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                     }
                     startTestTask = new SyncAsyncTasksMobileRunningTest(getActivity());
                     startTestTask.execute(0);
-                    System.out.println("sync attempt loop");
+                    Log.d(TAG, "sync attempt loop");
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
@@ -174,20 +182,21 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("onresume waitfrag");
+        Log.d(TAG, "onResume");
         // (re)sets the proper fragment destruction to false
         isProperDestruction = false;
-        System.out.println("NOT properdestruction");
+        Log.d(TAG, "NOT properly destroyed");
         isWaitFragmentRunning = true;
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        System.out.println("onPause waitfrag");
+        Log.d(TAG, "onPause");
         isWaitFragmentRunning = false;
         if (!isProperDestruction) {
-            System.out.println("not properly destroyed");
+            Log.d(TAG, "NOT properly destroyed");
+
             mobileQuitTestTask.execute(2);
             destroyFragment();
         }
@@ -197,11 +206,12 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
     public void onDestroyView() {
         super.onDestroyView();
         Wearable.getDataClient(Objects.requireNonNull(getContext())).removeListener(this);
-        System.out.println("waitDestroyed");
-        //Objects.requireNonNull(getActivity()).finish();
-        //startActivity(getActivity().getIntent());
+        Log.d(TAG, "onDestroyView");
     }
 
+    /**
+     * Catche any data changes from the wear and execute actions according to the message
+     */
     @SuppressLint("SetTextI18n")
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
@@ -238,13 +248,12 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                         m3.setText(getString(R.string.measure) + " 3: " + meas3 + " BPM");
                         ok4.setText("OK");
                         endTest.setText(R.string.end_of_test);
-                        timerBeforeDestroy.start();
+                        timerBeforeViewDestruction.start();
                     }
                 }
 
                 if (item.getUri().getPath().compareTo(WEAR_QUIT_APP_PATH) == 0) {
                     Log.d(TAG, "app closed on wear");
-                    System.out.println("app closed on wear");
                     drawInfoBox();
                 }
             }
@@ -259,6 +268,10 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         }
     }
 
+    /**
+     * This happen when the user quits the wear app during a test.
+     * Close the view and launch the warning message activity
+     */
     private void drawInfoBox() {
         Intent mobileAlertInfoIntent = new Intent(getContext(), MobileAlertInfoActivity.class);
         startActivity(mobileAlertInfoIntent);
@@ -270,6 +283,9 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
        drawAlertBox();
     }
 
+    /**
+     * Show a dialog box to ask the user if he wants to end the test
+     */
     public void drawAlertBox() {
         AlertDialog.Builder alert = new AlertDialog.Builder(Objects.requireNonNull(this.getContext()));
         alert.setTitle(R.string.cancel)
@@ -277,21 +293,22 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        System.out.println("action cancelled");
+                        Log.d(TAG, "action cancelled");
                         // send cancel signal
                         stopTestTask.execute(1);
-                        //Objects.requireNonNull(getActivity()).finish();
                         isProperDestruction = true;
-                        System.out.println("properdestruction");
+                        Log.d(TAG, "properly destroyed");
                         destroyFragment();
                     }
                 })
                 .setNegativeButton(R.string.no, null)
                 .setIcon(R.drawable.outline_warning_24)
                 .show();
-        // sqlDb.deletePatient(patientId);
     }
 
+    /**
+     * Destroy this fragment and show an ad
+     */
     private void destroyFragment() {
         Button startMeasure = Objects.requireNonNull(getActivity()).findViewById(R.id.startMeasureButton);
         startMeasure.setEnabled(true);
@@ -300,8 +317,6 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         assert fragmentManager != null;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.remove(WaitFragment.this).commit();
-
-
 
         // shows the ad
         if (isProperDestruction) {
@@ -313,10 +328,11 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         }
     }
 
-    // loads the ad (might freeze the screen for a second)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // loads the ad (might freeze the screen for a second)
         ad.loadAd(new AdRequest.Builder().build());
     }
 }

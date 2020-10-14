@@ -52,7 +52,6 @@ public class SyncAsyncTasksMobileRunningTest extends AsyncTask<Integer, Integer,
             mDataClient.putDataItem(putDataRequest);
         } catch (Exception e) {
             Log.e("Sync", "Error uploading data to Wear", e);
-            System.out.println("err sync");
         }
 
         return -1;

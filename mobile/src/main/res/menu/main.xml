@@ -10,6 +10,6 @@
     <item
         android:id="@+id/infos"
         android:icon="@drawable/outline_info_24"
-        android:title="Infos"
+        android:title="infos"
         app:showAsAction="ifRoom" />
 </menu>

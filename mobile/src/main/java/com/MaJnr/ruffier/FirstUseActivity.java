@@ -10,6 +10,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.MaJnr.testruffier.R;
 
+/**
+ * Show quick start instructions and informations
+ */
 public class FirstUseActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override

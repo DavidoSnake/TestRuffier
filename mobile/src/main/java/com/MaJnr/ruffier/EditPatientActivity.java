@@ -26,17 +26,20 @@ import java.util.Objects;
 public class EditPatientActivity extends AppCompatActivity {
 
     private static final String TAG = "EditPatientActivity";
+
+    // used to get patients
     int patientId;
     SQLiteDBHandler sqLiteDBHandler;
     Patient p;
 
+    // fields of the selected patient
     EditText lname;
     EditText fname;
     EditText m1;
     EditText m2;
     EditText m3;
 
-
+    // displayed text different with each translation
     private String lnameText;
     private String fnameText;
     private String m1Text;
@@ -70,9 +73,12 @@ public class EditPatientActivity extends AppCompatActivity {
         p = sqLiteDBHandler.getPatientById(patientId);
         lname.setText(p.getLastname());
         fname.setText(p.getFirstname());
-        m1.setText("" + p.getMeasure_1());
-        m2.setText("" + p.getMeasure_2());
-        m3.setText("" + p.getMeasure_3());
+        String s1 = "" + p.getMeasure_1();
+        String s2 = "" + p.getMeasure_2();
+        String s3 = "" + p.getMeasure_3();
+        m1.setText(s1);
+        m2.setText(s2);
+        m3.setText(s3);
     }
 
     @Override
@@ -81,9 +87,9 @@ public class EditPatientActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    // back arrow action
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // handle the items in the menu bar (confirm and back arrow)
         if (item.getItemId() == R.id.edit_confirm) {
             lnameText = lname.getText().toString();
             fnameText = fname.getText().toString();
@@ -100,9 +106,6 @@ public class EditPatientActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // sqLiteDBHandler.deletePatient(patientId);
-                                //  finish();
-
                                 Log.d(TAG, "confirmation");
                                 performConfirm();
                             }
@@ -118,7 +121,9 @@ public class EditPatientActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // checks every fields to make sure they are not empty before editing patient
+    /**
+     * Check every fields to make sure they are not empty before editing patient
+     */
     private void performConfirm() {
         sqLiteDBHandler.editPatient(patientId, lnameText, fnameText, m1Text, m2Text, m3Text);
         Calendar cal = Calendar.getInstance();
@@ -131,10 +136,11 @@ public class EditPatientActivity extends AppCompatActivity {
         finish();
     }
 
-    // hide the keyboard
+    /**
+     * Hide the soft keyboard
+     */
     private void hideSoftKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
         assert imm != null;
         if (imm.isAcceptingText()) {
             // verify if the soft keyboard is open

@@ -5,12 +5,12 @@
         android:id="@+id/delete"
         android:icon="@drawable/outline_delete_forever_24"
         android:orderInCategory="100"
-        android:title="supprimer"
+        android:title="delete"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/edit"
         android:icon="@drawable/outline_create_24"
-        android:title="Edit"
+        android:title="edit"
         app:showAsAction="ifRoom" />
 
 </menu>

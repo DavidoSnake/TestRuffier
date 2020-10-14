@@ -46,21 +46,30 @@ import static com.MaJnr.common.Constants.measuresList3;
 public class HeartRateActivity extends WearableActivity implements DataClient.OnDataChangedListener {
 
     final String TAG = "HeartRateActivity";
+
+    // view entities
     TextView title;
     TextView description;
-    BroadcastReceiver heartRateReceiver;
-    //BroadcastReceiver listenerReceiver;
+    Button done;
 
+    Vibrator vibrator;
+
+    // handle the heart rate service
     Intent rateServiceIntent;
-    //Intent eventListenerIntent;
+    BroadcastReceiver heartRateReceiver;
     DataClient mDataClient;
+
+    // flags
+    int mRate = 0;
     private static final int BOYDY_SENSOR_PERMISSION_CODE = 0;
+    private boolean isTimerRunning = false;
+    private boolean testEnded = false;
 
     // 1 min counter before first measure
-    CountDownTimer timer1 = new CountDownTimer(60000, 1000) {
+    CountDownTimer timerBeforeMeasure = new CountDownTimer(60000, 1000) {
         @Override
         public void onTick(long l) {
-            Log.d(TAG, "onTick1");
+            Log.d(TAG, "tick 1");
             String txt = "" + l / 1000 + " s";
             description.setText(txt);
         }
@@ -70,16 +79,20 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
             title.setText(R.string.measurement_in_progress);
             description.setText("");
             startService(rateServiceIntent);
-            //timer2.start();
         }
     };
 
-    // timer on measure process
-    CountDownTimer timer2 = new CountDownTimer(MEASURE_DURATION, 1000) {
+    /**
+     * Timer used at 3 moments, depending on the test step :
+     * 1. At the start of the first measure, launches the heart rate sensor service
+     * 2. At the start of the second measure, also launches the heart rate sensor service
+     * 3. At the end of the test, finish this activity
+     */
+    CountDownTimer timerOnMeasureStep = new CountDownTimer(MEASURE_DURATION, 1000) {
 
         @Override
         public void onTick(long l) {
-            Log.d(TAG, "onTick2");
+            Log.d(TAG, "tick 2");
         }
 
         @Override
@@ -102,7 +115,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
                 new CountDownTimer(10000, 1000) {
                     @Override
                     public void onTick(long l) {
-                        Log.d(TAG, "tickBeforeFinish");
+                        Log.d(TAG, "tick before finish");
                     }
 
                     @Override
@@ -115,7 +128,8 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
         }
     };
 
-    CountDownTimer timer3 = new CountDownTimer(45000, 1500) {
+    // timer used to vibrate the wear to rhythm the squat step
+    CountDownTimer timerOnSquatStep = new CountDownTimer(45000, 1500) {
         @Override
         public void onTick(long l) {
             Log.d(TAG, "onTick3");
@@ -128,17 +142,10 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
         @Override
         public void onFinish() {
             title.setText(R.string.instruct_lie);
-            timer1.start();
+            timerBeforeMeasure.start();
             startService(rateServiceIntent);
         }
     };
-
-
-    Button done;
-    int mRate = 0;
-    Vibrator vibrator;
-    private boolean isTimerRunning = false;
-    private boolean testEnded = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -186,7 +193,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
                         Log.e(TAG, "heart rate receiver error");
                 }
                 if (!isTimerRunning) {
-                    timer2.start();
+                    timerOnMeasureStep.start();
                     isTimerRunning = true;
                 }
             }
@@ -205,9 +212,12 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         Wearable.getDataClient(this).addListener(this);
-
     }
 
+    /**
+     * Set the action and the text of the button to avoid using multiple ones
+     * @param step : the step of the test
+     */
     public void setButtonClickListener(int step) {
         if (step == 1) {
             done.setOnClickListener(new View.OnClickListener() {
@@ -216,7 +226,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
                     Log.d(TAG, "onClick");
                     done.setVisibility(View.GONE);
                     title.setText(R.string.start_of_measure_in);
-                    timer1.start();
+                    timerBeforeMeasure.start();
                 }
             });
         } else if (step == 2) {
@@ -236,7 +246,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
 
                         @Override
                         public void onFinish() {
-                            timer3.start();
+                            timerOnSquatStep.start();
                         }
                     }.start();
                 }
@@ -249,6 +259,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
         super.onResume();
         Log.d(TAG, "resume");
 
+        // set the filters for the broadcast receiver
         IntentFilter filter1 = new IntentFilter(MEASURE_1_MSG);
         IntentFilter filter2 = new IntentFilter(MEASURE_2_MSG);
         IntentFilter filter3 = new IntentFilter(MEASURE_3_MSG);
@@ -266,37 +277,36 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
 
     @Override
     public void onPause() {
+        super.onPause();
         Log.d(TAG, "onPause");
         if (!testEnded) {
+            // abort the test on wear and on mobile
             Log.d(TAG, "test not ended");
             SyncAsyncTaskWearRunningTest wearQuitTestTask = new SyncAsyncTaskWearRunningTest(this, 0);
             wearQuitTestTask.execute(1);
             finish();
         }
-
-        super.onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop");
-        timer1.cancel();
-        timer2.cancel();
-        timer3.cancel();
+        timerBeforeMeasure.cancel();
+        timerOnMeasureStep.cancel();
+        timerOnSquatStep.cancel();
         stopService(rateServiceIntent);
         unregisterReceiver(heartRateReceiver);
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "onDestroy");
         super.onDestroy();
+        Log.d(TAG, "onDestroy");
         Wearable.getDataClient(this).removeListener(this);
     }
 
     public void checkBodySensorPermissionisRequired() {
-
         // Check if the BODY_SENSOR permission is already available.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -348,7 +358,7 @@ public class HeartRateActivity extends WearableActivity implements DataClient.On
                     finish();
                 } else if (Objects.requireNonNull(item.getUri().getPath()).compareTo(MOBILE_QUIT_APP_PATH) == 0) {
                     // app was closed by user
-                    System.out.println("app closed on mobile");
+                    Log.d(TAG, "app closed on mobile");
                     drawInfoBox();
                 }
             }

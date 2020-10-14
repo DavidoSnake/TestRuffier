@@ -9,7 +9,6 @@ import com.MaJnr.testruffier.R;
 
 public class WearAlertInfoActivity extends WearableActivity implements View.OnClickListener {
 
-    private static final String TAG = "WearAlertInfoActivity";
     Button okButton;
 
     @Override

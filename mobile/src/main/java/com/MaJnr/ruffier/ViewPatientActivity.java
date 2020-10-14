@@ -28,6 +28,9 @@ import com.MaJnr.testruffier.R;
 
 public class ViewPatientActivity extends AppCompatActivity {
 
+    private String TAG = "ViewPatientActivity";
+
+    // layout entities
     TextView pat_name;
     TextView dateTest;
     TextView show_m1;
@@ -35,17 +38,19 @@ public class ViewPatientActivity extends AppCompatActivity {
     TextView show_m3;
     TextView index_ir;
     TextView index_id;
+    Button startMeasure;
+
+    //todo: remove static access
     static int patientId;
+
+    // database access
     SQLiteDBHandler sqlDb;
     Context mContext;
     Patient p;
 
-    // start the measure on wear
-    Button startMeasure;
 
     // test proceeding fragment
     WaitFragment waitFragment;
-    private String TAG = "ViewPatientActivity";
     private boolean doNeedRefresh = true;
 
     @Override
@@ -72,10 +77,6 @@ public class ViewPatientActivity extends AppCompatActivity {
         startMeasure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* Intent intent = new Intent(ViewPatientActivity.this, InterstitialAdActivity.class);
-                startActivity(intent);
-                */
-
                 startMeasure.setEnabled(false);
                 waitFragment = new WaitFragment();
 
@@ -89,9 +90,12 @@ public class ViewPatientActivity extends AppCompatActivity {
         sqlDb = new SQLiteDBHandler(this);
     }
 
-    // fill all fields
+    /**
+     * Get data from the selected profile and fill the view with all recorded informations.
+     * Also calculate the indexes and gives an appreciation message (with a color)
+     */
     public void refreshFields() {
-        System.out.println("refreshing fields");
+        Log.d(TAG, "refreshing fields");
 
         doNeedRefresh = false;
 
@@ -180,9 +184,9 @@ public class ViewPatientActivity extends AppCompatActivity {
         }
     }
 
-    // delete icon
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // handle the menu bar items (delete and edit)
         if (item.getItemId() == R.id.delete) {
             AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
             alert.setTitle(R.string.suppression)
@@ -201,12 +205,12 @@ public class ViewPatientActivity extends AppCompatActivity {
                     .show();
             // sqlDb.deletePatient(patientId);
         } else if (item.getItemId() == R.id.edit) {
-            System.out.println("Edit");
+            Log.d(TAG, "edit");
             Intent editIntent = new Intent(this, EditPatientActivity.class);
             editIntent.putExtra("ID_PATIENT", patientId);
             startActivity(editIntent);
         } else {
-            System.out.println("back arrow");
+            Log.d(TAG, "back arrow");
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -220,9 +224,9 @@ public class ViewPatientActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        System.out.println("onresumeviewpat");
+        Log.d(TAG, "onResume");
         if (doNeedRefresh) {
-            System.out.println("needrefresh");
+            Log.d(TAG, "need refresh");
             refreshFields();
         }
         super.onResume();
@@ -230,7 +234,7 @@ public class ViewPatientActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        System.out.println("onpause viewpat");
+        Log.d(TAG, "onPause");
         doNeedRefresh = true;
         super.onPause();
     }
