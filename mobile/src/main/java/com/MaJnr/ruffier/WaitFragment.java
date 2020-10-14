@@ -44,6 +44,7 @@ import static com.MaJnr.common.Constants.HEART_MEASURE_1;
 import static com.MaJnr.common.Constants.HEART_MEASURE_2;
 import static com.MaJnr.common.Constants.HEART_MEASURE_3;
 import static com.MaJnr.common.Constants.HEART_RATE_COUNT_PATH;
+import static com.MaJnr.common.Constants.POST_TEST_AD;
 import static com.MaJnr.common.Constants.POST_TEST_AD_TEST;
 import static com.MaJnr.common.Constants.WEAR_QUIT_APP_PATH;
 import static com.MaJnr.common.Constants.isWaitFragmentRunning;
@@ -70,7 +71,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
 
     // database access
     private SQLiteDBHandler dbHandler;
-    private int patientId;
+    //private int patientId;
 
     // background task are handling the sending of data to the wear
     SyncAsyncTasksMobileRunningTest startTestTask;
@@ -102,12 +103,35 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         }
     };
 
+    // fragment initialization parameters
+    private static final String ARG_PARAM = "param";
+    private int patientId;
+
+    /**
+     * Use this factory method to create a new instance of this fragment
+     * using the provided parameters (avoid static access)
+     * @param param : parameter
+     * @return A new instance of fragment WaitFragment
+     */
+    public static WaitFragment newInstance(int param) {
+        WaitFragment fragment = new WaitFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PARAM, param);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_wait, container, false);
+
+        if (getArguments() != null) {
+            patientId = getArguments().getInt(ARG_PARAM);
+        }
+
         m1 = rootView.findViewById(R.id.m1);
         m2 = rootView.findViewById(R.id.m2);
         m3 = rootView.findViewById(R.id.m3);
@@ -126,9 +150,6 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
 
         Wearable.getDataClient(Objects.requireNonNull(getContext())).addListener(this);
         dbHandler = new SQLiteDBHandler(getContext());
-
-        //todo: remove static access (see mainactivity -> viewpatientactivity use)
-        patientId = ViewPatientActivity.patientId;
 
         rootView.setFocusableInTouchMode(true);
         rootView.requestFocus();
@@ -151,7 +172,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         });
 
         ad = new InterstitialAd(getContext());
-        ad.setAdUnitId(POST_TEST_AD_TEST);
+        ad.setAdUnitId(POST_TEST_AD);
 
         // creation of a thread to send sync signal in a loop
         Thread syncThread = new Thread(new Runnable() {

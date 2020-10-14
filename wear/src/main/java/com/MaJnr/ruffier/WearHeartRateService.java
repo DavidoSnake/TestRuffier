@@ -37,23 +37,24 @@ public class WearHeartRateService extends Service implements SensorEventListener
     // flags
     private int heartRate = 0;
     int res = 0;
-    int stepRate;
 
-    // delete or comment to remove heart rate emulation (used to debug)
-    //-------------------------------------------
-    CountDownTimer heartEmulator = new CountDownTimer(10000, 9000) {
-        @Override
-        public void onTick(long l) {
-            heartRate = (int) (Math.random()*5 + stepRate);
-            updateMeasuresList();
-        }
-
-        @Override
-        public void onFinish() {
-
-        }
-    };
-    //-------------------------------------------
+//    // delete or comment to remove heart rate emulation (used to debug)
+//    //-------------------------------------------
+//    int stepRate;
+//
+//    CountDownTimer heartEmulator = new CountDownTimer(10000, 9000) {
+//        @Override
+//        public void onTick(long l) {
+//            heartRate = (int) (Math.random()*5 + stepRate);
+//            updateMeasuresList();
+//        }
+//
+//        @Override
+//        public void onFinish() {
+//
+//        }
+//    };
+//    //-------------------------------------------
 
     @Override
     public void onCreate() {
@@ -72,16 +73,16 @@ public class WearHeartRateService extends Service implements SensorEventListener
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         sensorManager.registerListener(this, heartRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
-        // delete or comment to remove emulator values
-        //------------------------
-            if (measureNb == 1)
-                stepRate = 65;
-            if (measureNb == 2)
-                stepRate = 90;
-            if (measureNb == 3)
-                stepRate = 75;
-            heartEmulator.start();
-        //-------------------------
+//        // delete or comment to remove emulator values
+//        //------------------------
+//            if (measureNb == 1)
+//                stepRate = 65;
+//            if (measureNb == 2)
+//                stepRate = 90;
+//            if (measureNb == 3)
+//                stepRate = 75;
+//            heartEmulator.start();
+//        //-------------------------
 
         return super.onStartCommand(intent, flags, startId);
     }

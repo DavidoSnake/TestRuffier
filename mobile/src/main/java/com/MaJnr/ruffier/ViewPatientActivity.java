@@ -40,8 +40,7 @@ public class ViewPatientActivity extends AppCompatActivity {
     TextView index_id;
     Button startMeasure;
 
-    //todo: remove static access
-    static int patientId;
+    int patientId;
 
     // database access
     SQLiteDBHandler sqlDb;
@@ -78,7 +77,7 @@ public class ViewPatientActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startMeasure.setEnabled(false);
-                waitFragment = new WaitFragment();
+                waitFragment = WaitFragment.newInstance(patientId);
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
