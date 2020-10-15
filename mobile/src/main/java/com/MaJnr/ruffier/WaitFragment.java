@@ -44,7 +44,6 @@ import static com.MaJnr.common.Constants.HEART_MEASURE_1;
 import static com.MaJnr.common.Constants.HEART_MEASURE_2;
 import static com.MaJnr.common.Constants.HEART_MEASURE_3;
 import static com.MaJnr.common.Constants.HEART_RATE_COUNT_PATH;
-import static com.MaJnr.common.Constants.POST_TEST_AD;
 import static com.MaJnr.common.Constants.POST_TEST_AD_TEST;
 import static com.MaJnr.common.Constants.WEAR_QUIT_APP_PATH;
 import static com.MaJnr.common.Constants.isWaitFragmentRunning;
@@ -172,7 +171,7 @@ public class WaitFragment extends androidx.fragment.app.Fragment implements Data
         });
 
         ad = new InterstitialAd(getContext());
-        ad.setAdUnitId(POST_TEST_AD);
+        ad.setAdUnitId(POST_TEST_AD_TEST);
 
         // creation of a thread to send sync signal in a loop
         Thread syncThread = new Thread(new Runnable() {
